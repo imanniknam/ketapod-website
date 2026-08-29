@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -127,6 +126,9 @@ export function AssetSlot({
 /**
  * Idle drift for decorative objects. Small amplitude, long period — enough to
  * keep the composition alive without ever pulling focus from the copy.
+ *
+ * Driven by a CSS keyframe so it runs on the compositor; the per-instance
+ * amplitude, period and delay ride in as custom properties, set once.
  */
 export function Float({
   children,
@@ -143,18 +145,19 @@ export function Float({
   delay?: number;
   rotate?: number;
 }) {
-  const prefersReduced = useReducedMotion();
   return (
-    <motion.div
-      className={className}
-      animate={
-        prefersReduced
-          ? undefined
-          : { y: [-amplitude, amplitude, -amplitude], rotate: [-rotate, rotate, -rotate] }
+    <div
+      className={cn("kp-float", className)}
+      style={
+        {
+          "--kp-amp": `${amplitude}px`,
+          "--kp-dur": `${duration}s`,
+          "--kp-delay": `${delay}s`,
+          "--kp-rot": `${rotate}deg`,
+        } as React.CSSProperties
       }
-      transition={{ duration, repeat: Infinity, ease: "easeInOut", delay }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

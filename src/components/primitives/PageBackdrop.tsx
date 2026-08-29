@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { useEffect, useState } from "react";
 
 /**
  * The page's ambient ground.
@@ -20,15 +21,31 @@ export function PageBackdrop() {
   const prefersReduced = useReducedMotion();
   const { scrollYProgress } = useScroll();
 
+  /*
+   * The drift is desktop-only. On a phone these are four viewport-sized
+   * gradient layers, and transforming them on every scroll frame is real
+   * compositing work for an effect nobody is looking at while they scroll. The
+   * colour field is what matters; parked, it still does its job.
+   */
+  const [drift, setDrift] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const sync = () => setDrift(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
   /* Spring-smoothed so the washes glide instead of tracking the wheel 1:1. */
   const p = useSpring(scrollYProgress, { stiffness: 60, damping: 26, restDelta: 0.0005 });
 
   /* Different rates give the field depth: the far washes travel least. */
-  const still = ["0%", "0%"];
-  const violetTop = useTransform(p, [0, 1], prefersReduced ? still : ["0%", "-140%"]);
-  const amberMid = useTransform(p, [0, 1], prefersReduced ? still : ["0%", "-60%"]);
-  const violetLow = useTransform(p, [0, 1], prefersReduced ? still : ["0%", "-95%"]);
-  const mintLow = useTransform(p, [0, 1], prefersReduced ? still : ["0%", "-40%"]);
+  const moving = drift && !prefersReduced;
+  const still: [string, string] = ["0%", "0%"];
+  const violetTop = useTransform(p, [0, 1], moving ? ["0%", "-140%"] : still);
+  const amberMid = useTransform(p, [0, 1], moving ? ["0%", "-60%"] : still);
+  const violetLow = useTransform(p, [0, 1], moving ? ["0%", "-95%"] : still);
+  const mintLow = useTransform(p, [0, 1], moving ? ["0%", "-40%"] : still);
 
   return (
     <div

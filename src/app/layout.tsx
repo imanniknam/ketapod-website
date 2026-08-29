@@ -9,19 +9,20 @@ import "./globals.css";
  *
  * The family has no SemiBold, so 600 maps to Bold — 600 is what the buttons and
  * labels use, and Medium there reads too light against the 18px body.
+ *
+ * Only the weights the page actually sets are shipped (400/500/600/700/800);
+ * Light and Black were 50KB of font nothing referenced.
  */
 const iranYekan = localFont({
   variable: "--font-yekan",
   display: "swap",
   fallback: ["Vazirmatn", "ui-sans-serif", "system-ui", "sans-serif"],
   src: [
-    { path: "../fonts/IRANYekan-300.woff2", weight: "300", style: "normal" },
     { path: "../fonts/IRANYekan-400.woff2", weight: "400", style: "normal" },
     { path: "../fonts/IRANYekan-500.woff2", weight: "500", style: "normal" },
     { path: "../fonts/IRANYekan-700.woff2", weight: "600", style: "normal" },
     { path: "../fonts/IRANYekan-700.woff2", weight: "700", style: "normal" },
     { path: "../fonts/IRANYekan-800.woff2", weight: "800", style: "normal" },
-    { path: "../fonts/IRANYekan-900.woff2", weight: "900", style: "normal" },
   ],
 });
 
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#faf8f4",
+  themeColor: "#f9f9f7",
 };
 
 export default function RootLayout({

@@ -70,7 +70,7 @@ export function HeroMockup() {
             {/* waveform + progress */}
             <div className="mt-4">
               <Waveform
-                bars={38}
+                bars={26}
                 active
                 seed={11}
                 className="h-9 text-violet/45"

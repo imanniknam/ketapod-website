@@ -3,8 +3,14 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
+/*
+ * Real bookshelves are not monochrome, so these stay varied on purpose — but
+ * index 0 is the cover in the hero mockup, the most-looked-at image on the
+ * page. It carries the brand blue so the product shot agrees with the UI
+ * around it; the rest are free to be other books.
+ */
 const PALETTES = [
-  { a: "#4A2FD0", b: "#9B84FF", c: "#F3D9A4", d: "#150F2B" },
+  { a: "#2A38FF", b: "#9AA2FF", c: "#F3D9A4", d: "#0B0F2A" },
   { a: "#1F6F55", b: "#5FCBA0", c: "#F5E6C8", d: "#0C2219" },
   { a: "#9A3B2F", b: "#E89B7B", c: "#FBE6CD", d: "#2D110D" },
   { a: "#2B3A67", b: "#7E93D4", c: "#EBD9B4", d: "#0F1730" },

@@ -15,14 +15,6 @@ import { Problem } from "@/components/sections/Problem";
 import { SocialProof } from "@/components/sections/SocialProof";
 import { WhyUs } from "@/components/sections/WhyUs";
 
-/**
- * Home. Section order follows design-web-v1.1-HomePage:
- * Header → Hero → Why Us → Problem → Features → Interactive Demo → Kids →
- * Localization → Social Proof → FAQ → Lead Form → Final CTA → Footer.
- *
- * The spec's Trust Strip (the KPI card under the hero) was dropped at the
- * client's request; the same figures still appear in Social Proof.
- */
 export default function HomePage() {
   return (
     <>

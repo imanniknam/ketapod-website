@@ -6,21 +6,26 @@
    ========================================================================= */
 
 @theme {
-  /* — Surface ————————————————————————————————— */
-  --color-paper: #f9f8f5;
-  --color-paper-2: #f1f0ec;
-  --color-paper-3: #e7e6e0;
+  /* — Surface —————————————————————————————————
+     Warm, but at less than half the old saturation: enough to keep the paper
+     feeling like paper, too little to argue with the blue. */
+  --color-paper: #f9f9f7;
+  --color-paper-2: #f1f1ef;
+  --color-paper-3: #e7e7e4;
   --color-card: #ffffff;
 
-  /* — Ink ———————————————————————————————————— */
-  --color-ink: #15131d;
-  --color-ink-2: #3a3648;
-  --color-muted: #6d6980;
-  --color-faint: #9a95aa;
+  /* — Ink ————————————————————————————————————
+     On the brand hue, not a violet-leaning grey. The body text colour alone
+     paints ~150 elements; at hue 253 against a 236 accent it was the single
+     biggest reason the page read as two palettes. */
+  --color-ink: #13141d;
+  --color-ink-2: #363748;
+  --color-muted: #696b80;
+  --color-faint: #9596aa;
 
   /* — Line ——————————————————————————————————— */
-  --color-line: #e4e2da;
-  --color-line-2: #d4d2c8;
+  --color-line: #e4e3e0;
+  --color-line-2: #d4d3cf;
 
   /* — Brand ——————————————————————————————————
      Blues from the logo sheet: #2A38FF / #6E78FF / #9AA2FF. The token names
@@ -42,12 +47,12 @@
   --color-rose-100: #fbe4e2;
 
   /* — Night (dark sections) ————————————————————— */
-  --color-night: #0b0f2a;
-  --color-night-2: #131938;
-  --color-night-3: #1d2450;
-  --color-night-line: #262d5a;
-  --color-night-ink: #eef0ff;
-  --color-night-muted: #9aa0c8;
+  --color-night: #0b0d2a;
+  --color-night-2: #131538;
+  --color-night-3: #1d2050;
+  --color-night-line: #26295a;
+  --color-night-ink: #eeefff;
+  --color-night-muted: #9a9dc8;
 
   /* — Type ——————————————————————————————————— */
   --font-sans: var(--font-yekan), ui-sans-serif, system-ui, sans-serif;
@@ -352,5 +357,116 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================================================
+   Waveform
+   -------------------------------------------------------------------------
+   The bars used to be motion components with an infinite JS animation each.
+   At ~236 bars mounted across the page that is 236 values recomputed on the
+   main thread every frame, which is what made scrolling stutter on a phone.
+
+   As a CSS keyframe on `transform` the whole thing is handed to the compositor
+   and costs the main thread nothing. Per-bar rhythm survives because duration,
+   delay and peak arrive as custom properties in a static inline style — set
+   once at render, never touched again.
+   ========================================================================= */
+
+@keyframes kp-wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  35% {
+    transform: scaleY(var(--kp-peak, 1.55));
+  }
+  70% {
+    transform: scaleY(0.62);
+  }
+}
+
+.kp-wave-bar {
+  animation: kp-wave var(--kp-dur, 1.2s) var(--kp-delay, 0s) infinite ease-in-out;
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+/* Only bars inside a playing, on-screen waveform actually run. */
+.kp-wave-on .kp-wave-bar {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-wave-on .kp-wave-bar {
+    animation: none;
+  }
+}
+
+/*
+ * Marquee. Same reasoning as the waveform: an endless translate driven from JS
+ * writes an inline transform every frame and competes with scrolling. As a
+ * keyframe it is handed to the compositor. The track holds two identical
+ * copies and travels exactly half its width, so the loop point is invisible.
+ */
+@keyframes kp-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes kp-marquee-rev {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.kp-marquee-track {
+  animation: kp-marquee var(--kp-speed, 34s) linear infinite;
+  animation-play-state: paused;
+}
+
+.kp-marquee-track[data-reverse="true"] {
+  animation-name: kp-marquee-rev;
+}
+
+.kp-marquee-on .kp-marquee-track {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-marquee-on .kp-marquee-track {
+    animation: none;
+  }
+}
+
+/*
+ * Idle drift for the decorative 3D objects. Handed to the compositor for the
+ * same reason as the waveform and the marquee — five objects each nudging a
+ * transform from JS every frame is main-thread work a page gains nothing from.
+ */
+@keyframes kp-float {
+  0%,
+  100% {
+    transform: translateY(calc(var(--kp-amp, 10px) * -1)) rotate(calc(var(--kp-rot, 0deg) * -1));
+  }
+  50% {
+    transform: translateY(var(--kp-amp, 10px)) rotate(var(--kp-rot, 0deg));
+  }
+}
+
+.kp-float {
+  animation: kp-float var(--kp-dur, 6s) var(--kp-delay, 0s) infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-float {
+    animation: none;
   }
 }

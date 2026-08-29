@@ -39,10 +39,10 @@ export const ASSETS = {
 } as const;
 
 /**
- * Also sliced and available, with no slot claiming them yet:
- * `phone-headphones` (the full device composition — an alternative to the coded
- * hero mockup), `tile-headphones`, `books-play`, `bar-chart`, `leaf`,
- * `search-bar`.
+ * `phone-headphones.webp` is also sliced and kept — the full device composition,
+ * an alternative to the coded hero mockup. The other unclaimed slices were
+ * deleted rather than left in `public/`, where they were dead weight in every
+ * deploy.
  */
 
 /** Empty string ⇒ fall back to the designed placeholder. */

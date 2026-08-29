@@ -261,7 +261,7 @@ export function LeadForm() {
               </Float>
 
               <Waveform
-                bars={30}
+                bars={22}
                 active
                 seed={41}
                 className="mt-6 h-10 text-white/30"

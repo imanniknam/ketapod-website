@@ -102,7 +102,7 @@ export function Localization() {
                   viewport={{ once: true }}
                   transition={{ ...springSoft, delay: 0.08 * i }}
                   whileHover={prefersReduced ? undefined : { x: -6 }}
-                  className="flex items-center gap-4 rounded-lg border border-line bg-card p-3.5 shadow-e2 backdrop-blur-sm"
+                  className="flex items-center gap-4 rounded-lg border border-line bg-card p-3.5 shadow-e2"
                 >
                   <CoverArt
                     src={s.coverUrl || undefined}

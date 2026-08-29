@@ -1,12 +1,19 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Seamless ticker. The track holds two identical copies and slides exactly half
- * its width, so the loop point is invisible. Paused entirely under reduced
+ * Seamless ticker.
+ *
+ * The track holds two identical copies and slides exactly half its width, so
+ * the loop point is invisible.
+ *
+ * The slide is a CSS keyframe rather than a JS animation: an endless translate
+ * driven from the main thread writes an inline transform every frame and
+ * competes with scrolling, which is the last thing a decorative strip should
+ * do. It also only runs while on screen, and stops entirely under reduced
  * motion — an infinite marquee is exactly what that setting exists to stop.
  */
 export function Marquee({
@@ -23,7 +30,19 @@ export function Marquee({
   className?: string;
   fade?: boolean;
 }) {
-  const prefersReduced = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const [onScreen, setOnScreen] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setOnScreen(entry.isIntersecting),
+      { rootMargin: "100px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const track = (
     <div className="flex shrink-0 items-center gap-3 pl-3">{children}</div>
@@ -31,7 +50,8 @@ export function Marquee({
 
   return (
     <div
-      className={cn("relative overflow-hidden", className)}
+      ref={ref}
+      className={cn("relative overflow-hidden", onScreen && "kp-marquee-on", className)}
       style={
         fade
           ? {
@@ -44,14 +64,14 @@ export function Marquee({
       }
       aria-hidden
     >
-      <motion.div
-        className="flex w-max"
-        animate={prefersReduced ? undefined : { x: reverse ? ["-50%", "0%"] : ["0%", "-50%"] }}
-        transition={{ duration: speed, repeat: Infinity, ease: "linear" }}
+      <div
+        className="kp-marquee-track flex w-max"
+        data-reverse={reverse ? "true" : undefined}
+        style={{ "--kp-speed": `${speed}s` } as React.CSSProperties}
       >
         {track}
         {track}
-      </motion.div>
+      </div>
     </div>
   );
 }

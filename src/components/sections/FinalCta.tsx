@@ -17,13 +17,13 @@ export function FinalCta() {
   return (
     <section id="final-cta" className="relative pb-16 sm:pb-20 md:pb-28">
       <div className="container-k">
-        <div className="relative overflow-hidden rounded-2xl bg-[linear-gradient(215deg,#151C5E_0%,#0F1440_48%,#0B0F2A_100%)] px-5 py-12 sm:px-8 sm:py-14 md:px-16 md:py-20">
+        <div className="relative overflow-hidden rounded-2xl bg-[linear-gradient(215deg,#1A1A5E_0%,#101140_48%,#0B0D2A_100%)] px-5 py-12 sm:px-8 sm:py-14 md:px-16 md:py-20">
           {/* atmosphere */}
           <div aria-hidden className="pointer-events-none absolute inset-0">
             <div className="absolute -top-32 right-[10%] size-[480px] rounded-full bg-[radial-gradient(circle,rgba(110,120,255,0.34)_0%,transparent_66%)]" />
             <div className="dotgrid absolute inset-0 text-white/[0.06]" />
             <Waveform
-              bars={70}
+              bars={40}
               active={!prefersReduced}
               seed={57}
               minScale={0.08}

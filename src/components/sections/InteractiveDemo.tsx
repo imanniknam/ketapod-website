@@ -12,7 +12,7 @@ import { useDemoPlayer } from "@/hooks/useDemoPlayer";
 import { EASE_OUT_EXPO, springSoft } from "@/lib/motion";
 import { cn, formatTime } from "@/lib/utils";
 
-const PANEL_DARK = "#101538";
+const PANEL_DARK = "#101338";
 const PANEL_KIDS = "#FFF6E6";
 
 /**
@@ -135,7 +135,7 @@ export function InteractiveDemo() {
             <div className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,290px)]">
               {/* Voices */}
               <Reveal
-                className={cn("rounded-lg p-5 ring-1 backdrop-blur-sm", surface)}
+                className={cn("rounded-lg p-5 ring-1", surface)}
                 delay={0.05}
               >
                 <PanelTitle tone={ink}>انتخاب صدا</PanelTitle>
@@ -227,7 +227,7 @@ export function InteractiveDemo() {
               {/* Player */}
               <Reveal
                 className={cn(
-                  "relative p-6 ring-1 backdrop-blur-sm md:p-7",
+                  "relative p-6 ring-1 md:p-7",
                   surface,
                   kids ? "rounded-2xl" : "rounded-lg",
                 )}
@@ -267,7 +267,7 @@ export function InteractiveDemo() {
                 {/* waveform */}
                 <div className="mt-6">
                   <Waveform
-                    bars={54}
+                    bars={38}
                     active={isPlaying}
                     seed={17}
                     className={cn("h-14", kids ? "text-amber/45" : "text-violet-200/35")}
@@ -349,7 +349,7 @@ export function InteractiveDemo() {
 
               {/* Recommendations + continue listening */}
               <Reveal className="flex flex-col gap-4" delay={0.15}>
-                <div className={cn("rounded-lg p-5 ring-1 backdrop-blur-sm", surface)}>
+                <div className={cn("rounded-lg p-5 ring-1", surface)}>
                   <PanelTitle tone={ink}>
                     {kids ? "برای کودک انتخاب کن" : "پیشنهادهای هوشمند برای تو"}
                   </PanelTitle>
@@ -414,7 +414,7 @@ export function InteractiveDemo() {
                 {demo?.continueListening && (
                   <div
                     className={cn(
-                      "p-4 ring-1 backdrop-blur-sm",
+                      "p-4 ring-1",
                       surface,
                       kids ? "rounded-2xl" : "rounded-lg",
                     )}

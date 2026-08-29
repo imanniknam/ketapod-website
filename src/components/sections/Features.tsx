@@ -81,7 +81,7 @@ export function Features() {
 
               <div className="relative mt-8">
                 <Waveform
-                  bars={44}
+                  bars={28}
                   active
                   seed={23}
                   className="h-12 text-white/45"
