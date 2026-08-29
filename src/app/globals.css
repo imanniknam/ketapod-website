@@ -1,26 +1,356 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* =========================================================================
+   KETAPOD — Design Tokens
+   Concept: "کاغذ و موج" — warm paper, ink type, electric violet, wave motif.
+   ========================================================================= */
+
+@theme {
+  /* — Surface ————————————————————————————————— */
+  --color-paper: #f9f8f5;
+  --color-paper-2: #f1f0ec;
+  --color-paper-3: #e7e6e0;
+  --color-card: #ffffff;
+
+  /* — Ink ———————————————————————————————————— */
+  --color-ink: #15131d;
+  --color-ink-2: #3a3648;
+  --color-muted: #6d6980;
+  --color-faint: #9a95aa;
+
+  /* — Line ——————————————————————————————————— */
+  --color-line: #e4e2da;
+  --color-line-2: #d4d2c8;
+
+  /* — Brand ——————————————————————————————————
+     Blues from the logo sheet: #2A38FF / #6E78FF / #9AA2FF. The token names
+     stay `violet-*` so the whole page keeps addressing one accent ramp; only
+     the values moved. */
+  --color-violet: #2a38ff;
+  --color-violet-600: #1f2ad6;
+  --color-violet-700: #1a23a6;
+  --color-violet-200: #9aa2ff;
+  --color-violet-100: #dfe2ff;
+  --color-violet-50: #eff1ff;
+
+  /* — Accents ———————————————————————————————— */
+  --color-mint: #17b67c;
+  --color-mint-100: #d6f5e8;
+  --color-amber: #ffb020;
+  --color-amber-100: #fff1d6;
+  --color-rose: #e0685f;
+  --color-rose-100: #fbe4e2;
+
+  /* — Night (dark sections) ————————————————————— */
+  --color-night: #0b0f2a;
+  --color-night-2: #131938;
+  --color-night-3: #1d2450;
+  --color-night-line: #262d5a;
+  --color-night-ink: #eef0ff;
+  --color-night-muted: #9aa0c8;
+
+  /* — Type ——————————————————————————————————— */
+  --font-sans: var(--font-yekan), ui-sans-serif, system-ui, sans-serif;
+  /* One typeface across the whole page. IRANYekan carries the Latin and the
+     numerals too, so labels and figures stay in the same voice as the copy. */
+  --font-mono: var(--font-yekan), ui-sans-serif, system-ui, sans-serif;
+
+  /* — Radius (8 / 12 / 16 / 24 / 32) ————————————— */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 40px;
+
+  /* — Elevation (warm-tinted, 4 levels) ——————————— */
+  --shadow-e1: 0 1px 2px rgba(30, 24, 60, 0.04), 0 1px 1px rgba(30, 24, 60, 0.03);
+  --shadow-e2: 0 2px 4px rgba(30, 24, 60, 0.04), 0 6px 14px -6px rgba(30, 24, 60, 0.08);
+  --shadow-e3: 0 4px 8px rgba(30, 24, 60, 0.05), 0 18px 34px -14px rgba(30, 24, 60, 0.13);
+  --shadow-e4: 0 8px 16px rgba(30, 24, 60, 0.06), 0 40px 70px -28px rgba(30, 24, 60, 0.22);
+  --shadow-violet: 0 10px 24px -10px rgba(42, 56, 255, 0.45);
+
+  /* — Motion easing ——————————————————————————— */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* =========================================================================
+   Base
+   ========================================================================= */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* header height + breathing room */
+    scroll-padding-top: 104px;
+    -webkit-text-size-adjust: 100%;
+    /* `clip`, not `hidden`: hidden would force overflow-y to auto and turn the
+       element into a scroll container, which breaks position: fixed children. */
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 18px;
+    line-height: 1.85;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* Persian display type wants a little air, but tighter than body */
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+   * Figures line up in columns without changing typeface.
+   *
+   * IRANYekan's `locl` feature swaps Latin digits for Persian ones under
+   * lang="fa". That is right for numbers inside prose, but wrong for the
+   * Latin-composed figures this class marks — "20K+" must not become "۲۰K+",
+   * and the section indices pair with Latin eyebrow labels. So `locl` is
+   * switched off here and left on everywhere else.
+   */
+  .tnum {
+    font-feature-settings: "tnum" 1, "locl" 0;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-violet);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-violet-200);
+    color: var(--color-ink);
+  }
+
+  button,
+  a,
+  [role="button"],
+  summary {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================================
+   Utilities
+   ========================================================================= */
+
+@utility container-k {
+  width: 100%;
+  max-width: 1216px;
+  margin-inline: auto;
+  padding-inline: 16px;
+  @media (min-width: 480px) {
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    padding-inline: 32px;
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Dotted grid used as a spatial anchor behind hero / demo */
+@utility dotgrid {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/*
+ * Paper grain. Fractal noise baked into a data URI so it costs no request and
+ * tiles seamlessly. This is the thing that stops a flat fill reading as a
+ * synthetic block of colour — keep the opacity low enough that you notice it
+ * only when it is switched off.
+ */
+@utility grain {
+  /* Desaturated before it is drawn: coloured turbulence multiplies into a
+     speckle of tinted dots, while flat grey just breaks up the fill. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/*
+ * Hairline column rules — the layout grid, made just visible enough to feel.
+ * One 1px line per tile, and the tile is a sixth of the container, so the
+ * rules land exactly on the grid the content is set to.
+ */
+@utility rules {
+  background-image: linear-gradient(to left, currentColor 0 1px, transparent 1px);
+  background-size: calc(100% / 6) 100%;
+}
+
+/* Diagonal hatch for "asset slot" placeholders */
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 7px,
+    color-mix(in srgb, currentColor 12%, transparent) 7px,
+    color-mix(in srgb, currentColor 12%, transparent) 8px
+  );
+}
+
+@layer components {
+  /* ---- Section eyebrow: 01 —— label -------------------------------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* ---- Buttons ------------------------------------------------------ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 56px;
+    padding-inline: 28px;
+    border-radius: 999px;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color 0.22s var(--ease-out-quint),
+      color 0.22s var(--ease-out-quint),
+      border-color 0.22s var(--ease-out-quint),
+      box-shadow 0.22s var(--ease-out-quint);
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--color-ink);
+    color: #fff;
+    box-shadow: var(--shadow-e2);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-violet);
+    box-shadow: var(--shadow-violet);
+  }
+
+  .btn-violet {
+    background: var(--color-violet);
+    color: #fff;
+    box-shadow: var(--shadow-violet);
+  }
+  .btn-violet:hover:not(:disabled) {
+    background: var(--color-violet-600);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line-2);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    background: var(--color-card);
+    border-color: var(--color-ink);
+    box-shadow: var(--shadow-e2);
+  }
+
+  .btn-onnight {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-night-ink);
+    border: 1px solid var(--color-night-line);
+  }
+  .btn-onnight:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  /* ---- Card --------------------------------------------------------- */
+  .card {
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-e1);
+  }
+
+  /* ---- Field -------------------------------------------------------- */
+  .field {
+    width: 100%;
+    min-height: 58px;
+    padding-inline: 18px;
+    background: var(--color-card);
+    border: 1px solid var(--color-line-2);
+    border-radius: var(--radius-sm);
+    font-size: 17px;
+    font-family: inherit;
+    color: var(--color-ink);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .field::placeholder {
+    color: var(--color-faint);
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-violet);
+    box-shadow: 0 0 0 4px var(--color-violet-100);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-rose);
+  }
+  .field[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 4px var(--color-rose-100);
+  }
+}
+
+/* =========================================================================
+   Motion preferences
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

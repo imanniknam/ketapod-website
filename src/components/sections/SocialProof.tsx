@@ -1,0 +1,210 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Marquee } from "@/components/primitives/Marquee";
+import { Reveal, RevealGroup, RevealItem } from "@/components/primitives/Reveal";
+import { Aura } from "@/components/primitives/Aura";
+import { SectionHeading } from "@/components/primitives/SectionHeading";
+import {
+  FALLBACK_SOCIAL_PROOF,
+  getSocialProof,
+  type SocialProofData,
+} from "@/lib/api";
+import { springSoft } from "@/lib/motion";
+import { cn, faFigure } from "@/lib/utils";
+
+const AVATAR_TINTS = [
+  "bg-violet-100 text-violet-700",
+  "bg-amber-100 text-[#8a5c0a]",
+  "bg-mint-100 text-[#0f6b48]",
+  "bg-rose-100 text-[#8d2f28]",
+];
+
+/**
+ * Section 10 — Social Proof.
+ *
+ * Testimonials sit on a drag/scroll rail with alternating vertical offsets
+ * rather than in a tidy grid: four equal boxes read as filler, a rail reads as
+ * a stack of real quotes you can push through.
+ */
+export function SocialProof() {
+  const prefersReduced = useReducedMotion();
+  const [data, setData] = useState<SocialProofData>(FALLBACK_SOCIAL_PROOF);
+  const railRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ac = new AbortController();
+    getSocialProof(ac.signal).then((d) => {
+      if (!ac.signal.aborted && d) setData(d);
+    });
+    return () => ac.abort();
+  }, []);
+
+  function nudge(dir: 1 | -1) {
+    const el = railRef.current;
+    if (!el) return;
+    /* RTL scroll offsets run negative — direction is flipped deliberately. */
+    el.scrollBy({ left: dir * -340, behavior: "smooth" });
+  }
+
+  return (
+    <section id="social-proof" className="relative overflow-hidden pb-16 sm:pb-20 md:pb-32">
+      <Aura tone="amber" mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
+      <div className="container-k">
+        <SectionHeading
+          index="07"
+          eyebrow="Social Proof"
+          title="آنچه کاربران می‌گویند"
+          lead="بازخوردهای واقعی از کسانی که تجربه شنیدن‌شان با کتاپاد تغییر کرده است."
+          action={
+            <div className="flex items-center gap-2">
+              <RailButton onClick={() => nudge(-1)} label="نظر قبلی">
+                <ChevronRight className="size-5" strokeWidth={1.8} />
+              </RailButton>
+              <RailButton onClick={() => nudge(1)} label="نظر بعدی">
+                <ChevronLeft className="size-5" strokeWidth={1.8} />
+              </RailButton>
+            </div>
+          }
+        />
+
+        {/* ── Stats line ───────────────────────────────────────── */}
+        <RevealGroup
+          className="mt-12 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line py-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-10"
+          stagger={0.06}
+          amount={0.4}
+        >
+          {data.stats.map((s) => (
+            <RevealItem key={s.label} className="flex items-baseline gap-2.5">
+              <span className="tnum text-[30px] font-bold text-ink">
+                {faFigure(s.value)}
+              </span>
+              <span className="text-[16px] text-muted">{s.label}</span>
+            </RevealItem>
+          ))}
+        </RevealGroup>
+      </div>
+
+      {/* ── Testimonial rail (full-bleed) ──────────────────────── */}
+      <Reveal delay={0.05} className="container-k mt-10">
+        {/* Starts flush with the page grid, bleeds off the far edge so the rail
+            reads as "there is more" rather than as a broken margin. */}
+        <div
+          ref={railRef}
+          className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-10 pt-6"
+          style={{
+            marginInlineEnd: "calc(50% - 50vw)",
+            paddingInlineEnd: 24,
+            scrollPaddingInlineStart: 0,
+          }}
+        >
+          {data.testimonials.map((t, i) => (
+            <motion.figure
+              key={t.id}
+              className="w-[300px] shrink-0 snap-start rounded-lg border border-line bg-card p-6 shadow-e2 sm:w-[340px]"
+              style={{ marginTop: i % 2 === 1 ? 26 : 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ ...springSoft, delay: 0.05 * i }}
+              whileHover={prefersReduced ? undefined : { y: (i % 2 === 1 ? 26 : 0) - 6 }}
+            >
+              <Quote
+                className="size-7 rotate-180 text-violet/25"
+                strokeWidth={1.6}
+                aria-hidden
+              />
+              <blockquote className="mt-4 text-[17px] leading-[2] text-ink-2">
+                {t.message}
+              </blockquote>
+              <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-5">
+                {t.avatarUrl ? (
+                  <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
+                    <Image
+                      src={t.avatarUrl}
+                      alt={t.name}
+                      fill
+                      sizes="44px"
+                      className="object-cover"
+                    />
+                  </span>
+                ) : (
+                  <span
+                    className={cn(
+                      "grid size-11 shrink-0 place-items-center rounded-full text-[18px] font-bold",
+                      AVATAR_TINTS[i % AVATAR_TINTS.length],
+                    )}
+                    aria-hidden
+                  >
+                    {t.name.slice(0, 1)}
+                  </span>
+                )}
+                <span>
+                  <span className="block text-[17px] font-bold text-ink">{t.name}</span>
+                  <span className="block text-[15px] text-muted">{t.role}</span>
+                </span>
+              </figcaption>
+            </motion.figure>
+          ))}
+        </div>
+      </Reveal>
+
+      {/* ── Partners ───────────────────────────────────────────── */}
+      {data.partners.length > 0 && (
+        <div className="container-k">
+          <Reveal className="rounded-lg border border-line bg-paper-2/50 py-6">
+            <p className="eyebrow mb-4 justify-center px-6">Partners</p>
+            <Marquee speed={30} reverse>
+              {[...data.partners, ...data.partners].map((p, i) => (
+                <span
+                  key={`${p.id}-${i}`}
+                  className="flex h-10 items-center gap-3 whitespace-nowrap px-6"
+                >
+                  {p.logoUrl ? (
+                    <span className="relative h-7 w-24">
+                      <Image
+                        src={p.logoUrl}
+                        alt={p.name}
+                        fill
+                        sizes="96px"
+                        className="object-contain opacity-60"
+                      />
+                    </span>
+                  ) : (
+                    <span className="tnum text-[18px] font-semibold tracking-wide text-faint">
+                      {p.name}
+                    </span>
+                  )}
+                </span>
+              ))}
+            </Marquee>
+          </Reveal>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function RailButton({
+  onClick,
+  label,
+  children,
+}: {
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className="grid size-11 cursor-pointer place-items-center rounded-full border border-line-2 bg-card text-ink transition-colors duration-200 hover:border-ink hover:bg-ink hover:text-white"
+    >
+      {children}
+    </button>
+  );
+}
