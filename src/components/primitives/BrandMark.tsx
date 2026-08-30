@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
 import { useId } from "react";
 import { cn } from "@/lib/utils";
 
@@ -26,11 +25,9 @@ export function BrandIcon({
   tone?: "brand" | "mono";
   animated?: boolean;
 }) {
-  const prefersReduced = useReducedMotion();
   const gid = useId();
   const paint = tone === "mono" ? "currentColor" : `url(#${gid})`;
   const bars = [9, 15, 23, 31, 37, 29, 21, 14, 9];
-  const move = animated && !prefersReduced;
 
   return (
     <svg
@@ -76,22 +73,22 @@ export function BrandIcon({
 
       {/* waveform */}
       <g fill={paint}>
+        {/* The entrance is the `kp-bar-in` keyframe — a compositor animation
+            with a per-bar delay, rather than nine motion instances. */}
         {bars.map((h, i) => (
-          <motion.rect
+          <rect
             key={i}
             x={21 + i * 2.8}
             y={34.5 - h / 2}
             width="2.1"
             height={h}
             rx="1.05"
-            style={{ transformBox: "fill-box", transformOrigin: "center" }}
-            initial={move ? { scaleY: 0.25 } : false}
-            animate={move ? { scaleY: 1 } : undefined}
-            transition={{
-              duration: 0.55,
-              delay: 0.04 * i,
-              ease: [0.16, 1, 0.3, 1],
-            }}
+            className={animated ? "kp-bar-in" : undefined}
+            style={
+              animated
+                ? ({ "--kp-delay": `${(0.04 * i).toFixed(2)}s` } as React.CSSProperties)
+                : undefined
+            }
           />
         ))}
       </g>

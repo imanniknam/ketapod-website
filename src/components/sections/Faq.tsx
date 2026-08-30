@@ -1,16 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Plus } from "lucide-react";
 import { useId, useState } from "react";
 import { AssetSlot, Float } from "@/components/primitives/AssetSlot";
-import { asset } from "@/lib/assets";
 import { Aura } from "@/components/primitives/Aura";
-import { SectionHeading } from "@/components/primitives/SectionHeading";
-import { FAQ_ITEMS, PRIMARY_CTA_LABEL } from "@/lib/content";
 import { Cta } from "@/components/primitives/Cta";
+import { Section } from "@/components/primitives/Section";
+import { SectionHeading } from "@/components/primitives/SectionHeading";
+import { asset } from "@/lib/assets";
 import { trackEvent } from "@/lib/api";
-import { EASE_OUT_EXPO, springSoft } from "@/lib/motion";
+import { FAQ_ITEMS, PRIMARY_CTA_LABEL } from "@/lib/content";
 import { cn, pad2 } from "@/lib/utils";
 
 const HALF = Math.ceil(FAQ_ITEMS.length / 2);
@@ -29,7 +28,7 @@ export function Faq() {
   }
 
   return (
-    <section id="faq" className="relative overflow-hidden pb-16 sm:pb-20 md:pb-32">
+    <Section id="faq" className="overflow-hidden">
       <Aura tone="violet" mark="dots" className="left-[-10%] top-32 hidden lg:block" size="size-[340px]" />
       {/* Decorative, outside the reading column, desktop only. */}
       <Float
@@ -37,7 +36,7 @@ export function Faq() {
         amplitude={9}
         duration={6.5}
       >
-        <AssetSlot src={asset("faqBubbleViolet")} alt="" label="حباب گفتگو" ratio="123 / 112" />
+        <AssetSlot src={asset("faqBubbleViolet")} alt="" label="حباب گفتگو" ratio="123 / 112" sizes="104px" />
       </Float>
       <Float
         className="pointer-events-none absolute bottom-24 left-1 hidden w-[96px] xl:block 2xl:left-6 2xl:w-[112px]"
@@ -45,45 +44,50 @@ export function Faq() {
         duration={7.5}
         delay={0.7}
       >
-        <AssetSlot src={asset("faqBubbleGreen")} alt="" label="حباب گفتگو" ratio="127 / 114" tone="mint" />
+        <AssetSlot
+          src={asset("faqBubbleGreen")}
+          alt=""
+          label="حباب گفتگو"
+          ratio="127 / 114"
+          tone="mint"
+          sizes="112px"
+        />
       </Float>
 
-      <div className="container-k">
-        <SectionHeading
-          index="08"
-          eyebrow="FAQ"
-          title="سوالات متداول"
-          lead="اگر جواب سوالت اینجا نبود، فرم پایین را پر کن تا برایت توضیح بدهیم."
-          action={
-            <Cta
-              label={PRIMARY_CTA_LABEL}
-              target="lead-form"
-              event="final_cta_clicked"
-              section="faq"
-              element="faq_cta"
-              variant="ghost"
-            />
-          }
-        />
+      <SectionHeading
+        index="08"
+        eyebrow="FAQ"
+        title="سوالات متداول"
+        lead="اگر جواب سوالت اینجا نبود، فرم پایین را پر کن تا برایت توضیح بدهیم."
+        action={
+          <Cta
+            label={PRIMARY_CTA_LABEL}
+            target="lead-form"
+            event="final_cta_clicked"
+            section="faq"
+            element="faq_cta"
+            variant="ghost"
+          />
+        }
+      />
 
-        <div className="mt-12 grid gap-x-10 gap-y-0 md:grid-cols-2">
-          {COLUMNS.map((column, ci) => (
-            <div key={ci} className="border-t border-line">
-              {column.map((item, i) => (
-                <FaqRow
-                  key={item.id}
-                  index={ci * HALF + i + 1}
-                  question={item.question}
-                  answer={item.answer}
-                  open={open === item.id}
-                  onToggle={() => toggle(item.id, item.question)}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
+      <div className="mt-12 grid gap-x-10 gap-y-0 md:grid-cols-2">
+        {COLUMNS.map((column, ci) => (
+          <div key={ci} className="border-t border-line">
+            {column.map((item, i) => (
+              <FaqRow
+                key={item.id}
+                index={ci * HALF + i + 1}
+                question={item.question}
+                answer={item.answer}
+                open={open === item.id}
+                onToggle={() => toggle(item.id, item.question)}
+              />
+            ))}
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
@@ -100,7 +104,6 @@ function FaqRow({
   open: boolean;
   onToggle: () => void;
 }) {
-  const prefersReduced = useReducedMotion();
   const panelId = useId();
 
   return (
@@ -131,38 +134,38 @@ function FaqRow({
             {question}
           </span>
 
-          <motion.span
+          <span
             className={cn(
-              "grid size-8 shrink-0 place-items-center rounded-full border transition-colors duration-200",
+              "grid size-8 shrink-0 place-items-center rounded-full border transition-[transform,color,background-color,border-color] duration-300",
               open
-                ? "border-violet bg-violet text-white"
+                ? "rotate-[135deg] border-violet bg-violet text-white"
                 : "border-line-2 text-ink group-hover:border-violet group-hover:text-violet",
             )}
-            animate={{ rotate: open ? 135 : 0 }}
-            transition={springSoft}
           >
             <Plus className="size-4" strokeWidth={2} aria-hidden />
-          </motion.span>
+          </span>
         </button>
       </h3>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id={panelId}
-            key="panel"
-            initial={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            animate={prefersReduced ? { opacity: 1 } : { height: "auto", opacity: 1 }}
-            exit={prefersReduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-            transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
-            className="overflow-hidden"
-          >
-            <p className="ms-10 me-2 border-s-2 border-violet-200 pb-6 ps-4 text-[16px] leading-[2.05] text-muted">
-              {answer}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/*
+        `grid-template-rows: 0fr → 1fr` animates to the panel's intrinsic
+        height in pure CSS. The old version measured it with AnimatePresence,
+        which meant this section could never stop being an animation-library
+        client component.
+      */}
+      <div
+        id={panelId}
+        role="region"
+        aria-hidden={!open}
+        className="grid transition-[grid-template-rows,opacity] duration-[380ms] ease-[var(--ease-out-expo)]"
+        style={{ gridTemplateRows: open ? "1fr" : "0fr", opacity: open ? 1 : 0 }}
+      >
+        <div className="overflow-hidden">
+          <p className="ms-10 me-2 border-s-2 border-violet-200 pb-6 ps-4 text-[16px] leading-[2.05] text-muted">
+            {answer}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

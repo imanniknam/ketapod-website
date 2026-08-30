@@ -109,7 +109,9 @@ export type SocialProofData = {
     message: string;
     avatarUrl: string;
   }[];
-  partners: { id: string; name: string; logoUrl: string }[];
+  /* `partners` is still in the endpoint's response. The page no longer shows a
+     partners rail, so it isn't modelled here — extra keys in the payload are
+     ignored, and the field can come back if the section does. */
 };
 
 export type Option = { value: string; label: string };
@@ -295,12 +297,6 @@ export const FALLBACK_SOCIAL_PROOF: SocialProofData = {
       message: "حالت کودک باعث شد بدون نگرانی گوشی را دست بچه بدهم.",
       avatarUrl: "",
     },
-  ],
-  partners: [
-    { id: "p1", name: "Partner A", logoUrl: "" },
-    { id: "p2", name: "Partner B", logoUrl: "" },
-    { id: "p3", name: "Partner C", logoUrl: "" },
-    { id: "p4", name: "Partner D", logoUrl: "" },
   ],
 };
 

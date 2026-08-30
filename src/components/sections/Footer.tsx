@@ -1,10 +1,9 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Mail, Phone } from "lucide-react";
 import { BrandMark, BrandWord } from "@/components/primitives/BrandMark";
+import { Reveal } from "@/components/primitives/Reveal";
 import { FOOTER, NAV_ITEMS } from "@/lib/content";
-import { EASE_OUT_EXPO } from "@/lib/motion";
 import { openLeadForm } from "@/lib/leadIntent";
 import { scrollToSection } from "@/lib/utils";
 
@@ -40,19 +39,18 @@ export function Footer() {
 
             <div className="mt-6 flex items-center gap-2.5">
               {FOOTER.socials.map((s) => (
-                <motion.a
+                <a
                   key={s.name}
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.name}
-                  whileHover={{ y: -3 }}
-                  className="grid size-10 place-items-center rounded-full border border-night-line text-night-muted transition-colors duration-200 hover:border-violet-200 hover:text-violet-200"
+                  className="lift grid size-10 place-items-center rounded-full border border-night-line text-night-muted transition-[color,border-color,transform] duration-200 hover:border-violet-200 hover:text-violet-200"
                 >
                   <svg viewBox="0 0 24 24" className="size-[18px]" fill="currentColor" aria-hidden>
                     <path d={SOCIAL_PATHS[s.name] ?? SOCIAL_PATHS.LinkedIn} />
                   </svg>
-                </motion.a>
+                </a>
               ))}
             </div>
           </div>
@@ -104,16 +102,12 @@ export function Footer() {
         </div>
 
         {/* Oversized wordmark — the page signs off */}
-        <motion.div
+        <Reveal
+          amount={0.3}
           className="relative select-none overflow-hidden border-t border-night-line pt-8"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.9, ease: EASE_OUT_EXPO }}
-          aria-hidden
         >
           <BrandWord className="mx-auto w-[78%] max-w-[680px] text-violet-200/[0.11]" />
-        </motion.div>
+        </Reveal>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-night-line py-6 sm:flex-row">
           <p className="text-[15px] text-night-muted">

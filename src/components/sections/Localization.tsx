@@ -41,7 +41,7 @@ export function Localization() {
   const visible = samples.length ? samples : data.samples;
 
   return (
-    <section id="localization" className="relative overflow-hidden pb-16 sm:pb-20 md:pb-32">
+    <section id="localization" className="section-rhythm relative overflow-hidden">
       <Aura tone="violet" mark="orbit" className="left-[-14%] top-8 hidden md:block" size="size-[440px]" />
       <div className="container-k">
         <div className="grid items-start gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-10">
@@ -101,7 +101,7 @@ export function Localization() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ ...springSoft, delay: 0.08 * i }}
-                  whileHover={prefersReduced ? undefined : { x: -6 }}
+                  whileHover={prefersReduced ? undefined : { y: -5 }}
                   className="flex items-center gap-4 rounded-lg border border-line bg-card p-3.5 shadow-e2"
                 >
                   <CoverArt

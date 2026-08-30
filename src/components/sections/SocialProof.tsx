@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Marquee } from "@/components/primitives/Marquee";
 import { Reveal, RevealGroup, RevealItem } from "@/components/primitives/Reveal";
 import { Aura } from "@/components/primitives/Aura";
 import { SectionHeading } from "@/components/primitives/SectionHeading";
@@ -18,9 +17,9 @@ import { cn, faFigure } from "@/lib/utils";
 
 const AVATAR_TINTS = [
   "bg-violet-100 text-violet-700",
-  "bg-amber-100 text-[#8a5c0a]",
-  "bg-mint-100 text-[#0f6b48]",
-  "bg-rose-100 text-[#8d2f28]",
+  "bg-amber-100 text-amber-ink",
+  "bg-mint-100 text-mint-ink",
+  "bg-rose-100 text-rose-ink",
 ];
 
 /**
@@ -51,8 +50,11 @@ export function SocialProof() {
   }
 
   return (
-    <section id="social-proof" className="relative overflow-hidden pb-16 sm:pb-20 md:pb-32">
-      <Aura tone="amber" mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
+    <section id="social-proof" className="section-rhythm relative overflow-hidden">
+      {/* Violet, like every other section aura. Amber now means "kids" and
+          nothing else — an amber wash here was a large part of why the page's
+          temperature seemed to change from section to section. */}
+      <Aura tone="violet" mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
       <div className="container-k">
         <SectionHeading
           index="07"
@@ -110,7 +112,7 @@ export function SocialProof() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ ...springSoft, delay: 0.05 * i }}
-              whileHover={prefersReduced ? undefined : { y: (i % 2 === 1 ? 26 : 0) - 6 }}
+              whileHover={prefersReduced ? undefined : { y: (i % 2 === 1 ? 26 : 0) - 5 }}
             >
               <Quote
                 className="size-7 rotate-180 text-violet/25"
@@ -151,39 +153,6 @@ export function SocialProof() {
           ))}
         </div>
       </Reveal>
-
-      {/* ── Partners ───────────────────────────────────────────── */}
-      {data.partners.length > 0 && (
-        <div className="container-k">
-          <Reveal className="rounded-lg border border-line bg-paper-2/50 py-6">
-            <p className="eyebrow mb-4 justify-center px-6">Partners</p>
-            <Marquee speed={30} reverse>
-              {[...data.partners, ...data.partners].map((p, i) => (
-                <span
-                  key={`${p.id}-${i}`}
-                  className="flex h-10 items-center gap-3 whitespace-nowrap px-6"
-                >
-                  {p.logoUrl ? (
-                    <span className="relative h-7 w-24">
-                      <Image
-                        src={p.logoUrl}
-                        alt={p.name}
-                        fill
-                        sizes="96px"
-                        className="object-contain opacity-60"
-                      />
-                    </span>
-                  ) : (
-                    <span className="tnum text-[18px] font-semibold tracking-wide text-faint">
-                      {p.name}
-                    </span>
-                  )}
-                </span>
-              ))}
-            </Marquee>
-          </Reveal>
-        </div>
-      )}
     </section>
   );
 }

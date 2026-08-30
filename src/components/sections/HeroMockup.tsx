@@ -1,26 +1,19 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import { Heart, Pause, Repeat, SkipBack, SkipForward, Sparkles } from "lucide-react";
 import { CoverArt } from "@/components/primitives/CoverArt";
 import { Waveform } from "@/components/primitives/Waveform";
-import { EASE_OUT_EXPO } from "@/lib/motion";
 
 /**
  * Hero product mockup — built in markup rather than pasted as a flat image, so
  * it stays crisp, themable and responsive. Decorative only: the real player
  * with actual audio lives in the Interactive Demo section.
+ *
+ * Fully static now: the tilt and the entrance are a CSS keyframe, so the
+ * largest thing above the fold is plain HTML that paints before any JavaScript
+ * has run.
  */
 export function HeroMockup() {
-  const prefersReduced = useReducedMotion();
-
   return (
-    <motion.div
-      className="relative w-[268px] shrink-0 sm:w-[300px]"
-      initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 40, rotate: -3 }}
-      animate={{ opacity: 1, y: 0, rotate: -2.2 }}
-      transition={{ duration: 1.1, ease: EASE_OUT_EXPO, delay: 0.25 }}
-    >
+    <div className="kp-mockup-in relative w-[268px] shrink-0 sm:w-[300px]">
       {/* Device */}
       <div className="relative rounded-[42px] bg-ink p-[9px] shadow-e4">
         <div className="relative overflow-hidden rounded-[34px] bg-[#f7f5ff]">
@@ -77,12 +70,7 @@ export function HeroMockup() {
                 barClassName="w-[2.5px]"
               />
               <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-violet-100">
-                <motion.div
-                  className="h-full rounded-full bg-violet"
-                  initial={{ width: "0%" }}
-                  animate={{ width: "42%" }}
-                  transition={{ duration: 1.4, ease: EASE_OUT_EXPO, delay: 0.9 }}
-                />
+                <div className="kp-progress-in h-full w-[42%] rounded-full bg-violet" />
               </div>
               <div className="mt-1.5 flex items-center justify-between">
                 <span className="tnum text-[13px] text-muted">08:42</span>
@@ -125,6 +113,6 @@ export function HeroMockup() {
         className="pointer-events-none absolute inset-0 rounded-[42px] bg-gradient-to-bl from-white/35 via-transparent to-transparent"
         aria-hidden
       />
-    </motion.div>
+    </div>
   );
 }

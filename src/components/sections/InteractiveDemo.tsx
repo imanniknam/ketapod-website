@@ -57,10 +57,12 @@ export function InteractiveDemo() {
   const surface = kids ? "bg-white/80 ring-line" : "bg-white/[0.05] ring-white/10";
 
   return (
-    <section id="demo" className="relative pb-16 sm:pb-20 md:pb-32">
+    <section id="demo" className="section-rhythm relative">
       <div className="container-k">
         <motion.div
-          className="relative overflow-hidden rounded-2xl px-4 py-10 sm:px-8 sm:py-12 md:px-12 md:py-16"
+          /* Same `panel` shell as Problem, Kids and the Final CTA. Only the
+             fill is animated, because Kids mode repaints it. */
+          className="panel"
           /* `initial={false}` paints the panel on first render instead of
              fading it up from transparent on mount. */
           initial={false}
@@ -120,7 +122,7 @@ export function InteractiveDemo() {
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1",
                     kids
-                      ? "bg-amber-100 text-[#8a5c0a] ring-amber/30"
+                      ? "bg-amber-100 text-amber-ink ring-amber/30"
                       : "bg-white/10 text-violet-200 ring-white/15",
                   )}
                 >
@@ -176,7 +178,7 @@ export function InteractiveDemo() {
                               active
                                 ? "bg-white/20 text-white ring-white/30"
                                 : kids
-                                  ? "bg-amber-100 text-[#8a5c0a] ring-amber/25"
+                                  ? "bg-amber-100 text-amber-ink ring-amber/25"
                                   : "bg-white/10 text-violet-200 ring-white/10",
                             )}
                           >
@@ -247,7 +249,7 @@ export function InteractiveDemo() {
                       className={cn(
                         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold",
                         kids
-                          ? "bg-amber-100 text-[#8a5c0a]"
+                          ? "bg-amber-100 text-amber-ink"
                           : "bg-violet/25 text-violet-200",
                       )}
                     >
@@ -307,7 +309,7 @@ export function InteractiveDemo() {
                       "grid size-16 place-items-center rounded-full text-white transition-colors duration-200",
                       canPlay
                         ? kids
-                          ? "cursor-pointer bg-amber shadow-e3 hover:bg-[#dd9d26]"
+                          ? "cursor-pointer bg-amber shadow-e3 hover:bg-amber-600"
                           : "cursor-pointer bg-violet shadow-violet hover:bg-violet-600"
                         : "cursor-not-allowed bg-white/15 text-white/40",
                     )}
@@ -334,7 +336,7 @@ export function InteractiveDemo() {
                       className={cn(
                         "mt-4 flex items-center justify-center gap-2 rounded-sm px-3 py-2 text-center text-[15px]",
                         kids
-                          ? "bg-rose-100 text-[#8d2f28]"
+                          ? "bg-rose-100 text-rose-ink"
                           : "bg-white/[0.07] text-night-muted",
                       )}
                     >

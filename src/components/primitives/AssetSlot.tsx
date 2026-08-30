@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
@@ -14,12 +12,12 @@ const TONES: Record<Tone, { wash: string; ink: string; ring: string }> = {
   },
   amber: {
     wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#fdf1d9_0%,#fdf8ee_55%,#faf8f4_100%)]",
-    ink: "text-[#8a5c0a]",
+    ink: "text-amber-ink",
     ring: "ring-amber-100",
   },
   mint: {
     wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#ddf1e8_0%,#f1f9f5_55%,#faf8f4_100%)]",
-    ink: "text-[#0f6b48]",
+    ink: "text-mint-ink",
     ring: "ring-mint-100",
   },
   night: {

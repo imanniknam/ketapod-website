@@ -206,7 +206,7 @@ export function LeadForm() {
   const busy = phase === "submitting";
 
   return (
-    <section id="lead-form" className="relative pb-16 sm:pb-20 md:pb-32">
+    <section id="lead-form" className="section-rhythm relative">
       <div className="container-k">
         <div className="relative grid overflow-hidden rounded-2xl border border-line bg-card shadow-e3 lg:grid-cols-[0.85fr_1.15fr]">
           {/* ── Pitch panel ────────────────────────────────────── */}
@@ -506,7 +506,7 @@ export function LeadForm() {
                       initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       role="alert"
-                      className="flex items-center gap-2 rounded-sm bg-rose-100 px-3.5 py-3 text-[16px] text-[#8d2f28]"
+                      className="flex items-center gap-2 rounded-sm bg-rose-100 px-3.5 py-3 text-[16px] text-rose-ink"
                     >
                       <TriangleAlert className="size-4 shrink-0" strokeWidth={1.9} aria-hidden />
                       {serverMessage ?? LEAD_FORM_COPY.errorBody}

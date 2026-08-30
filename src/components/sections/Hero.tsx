@@ -1,40 +1,34 @@
-"use client";
-
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Play } from "lucide-react";
-import { useRef } from "react";
 import { AssetSlot, Float } from "@/components/primitives/AssetSlot";
-import { asset } from "@/lib/assets";
 import { Cta } from "@/components/primitives/Cta";
 import { Icon } from "@/components/primitives/Icon";
+import { RevealGroup, RevealItem } from "@/components/primitives/Reveal";
 import { HeroMockup } from "./HeroMockup";
+import { asset } from "@/lib/assets";
 import { HERO } from "@/lib/content";
-import { EASE_OUT_EXPO, fadeIn, fadeUp } from "@/lib/motion";
 
 const HIGHLIGHT_ICONS = ["sparkles", "baby", "languages", "wand"] as const;
 
+/**
+ * Section 1 — Hero.
+ *
+ * A server component. It used to drive a scroll-linked parallax between the
+ * copy and the device, which meant a `useScroll` and two `useTransform`s
+ * running from the first frame on the one screen where the browser is already
+ * doing the most work. The depth it bought was a few pixels; the cost was the
+ * first thing anyone feels.
+ */
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const prefersReduced = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  /* Gentle depth: the mockup drifts slower than the copy as the page leaves. */
-  const mockupY = useTransform(scrollYProgress, [0, 1], [0, prefersReduced ? 0 : -70]);
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, prefersReduced ? 0 : 40]);
-
-  const enter = prefersReduced ? fadeIn : fadeUp;
-
   return (
     <section
-      ref={ref}
       id="hero"
-      className="relative overflow-hidden pb-14 pt-28 sm:pt-32 md:pb-24 md:pt-40"
+      /* Trailing space comes from the shared rhythm; the top padding is the
+         hero's alone, clearing the fixed header. */
+      className="section-rhythm relative overflow-hidden pt-28 sm:pt-32 md:pt-40"
     >
       {/* ── Backdrop ─────────────────────────────────────────────── */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[-10%] size-[620px] rounded-full bg-[radial-gradient(circle,rgba(42,56,255,0.16)_0%,rgba(42,56,255,0.05)_45%,transparent_70%)] blur-[2px]" />
+        <div className="absolute -top-40 left-[-10%] size-[620px] rounded-full bg-[radial-gradient(circle,rgba(42,56,255,0.16)_0%,rgba(42,56,255,0.05)_45%,transparent_70%)]" />
         <div className="absolute top-[18%] right-[-8%] size-[420px] rounded-full bg-[radial-gradient(circle,rgba(255,176,32,0.13)_0%,transparent_68%)]" />
         <div className="dotgrid absolute bottom-8 left-6 h-40 w-52 text-line-2/70 opacity-70 md:left-16" />
         <svg
@@ -50,50 +44,46 @@ export function Hero() {
       <div className="container-k">
         <div className="grid items-center gap-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-8">
           {/* ── Copy ───────────────────────────────────────────── */}
-          <motion.div
-            style={{ y: copyY }}
-            initial="hidden"
-            animate="show"
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
+          <RevealGroup
             className="relative z-10 max-w-[560px]"
+            stagger={0.09}
+            delayChildren={0.1}
+            amount={0.05}
           >
-            <motion.h1
-              variants={enter}
-              className="text-[30px] font-extrabold leading-[1.42] tracking-[-0.015em] text-ink min-[400px]:text-[34px] sm:text-[44px] md:text-[52px]"
-            >
-              {HERO.titleLead}
-              <br />
-              <span className="relative inline-block text-violet">
-                {HERO.titleAccent}
-                {/* hand-drawn underline, drawn on entry */}
-                <motion.svg
-                  className="absolute -bottom-1.5 right-0 h-3 w-full text-violet/35"
-                  viewBox="0 0 300 12"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  aria-hidden
-                >
-                  <motion.path
-                    d="M2 8.5C48 3.5 104 2 150 4.5C196 7 252 9 298 4"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ duration: 1, ease: EASE_OUT_EXPO, delay: 0.75 }}
-                  />
-                </motion.svg>
-              </span>
-            </motion.h1>
+            <RevealItem>
+              <h1 className="text-[30px] font-extrabold leading-[1.42] tracking-[-0.015em] text-ink min-[400px]:text-[34px] sm:text-[44px] md:text-[52px]">
+                {HERO.titleLead}
+                <br />
+                <span className="relative inline-block text-violet">
+                  {HERO.titleAccent}
+                  {/* hand-drawn underline, drawn on entry by a CSS dash offset */}
+                  <svg
+                    className="absolute -bottom-1.5 right-0 h-3 w-full text-violet/35"
+                    viewBox="0 0 300 12"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    aria-hidden
+                  >
+                    <path
+                      className="kp-underline"
+                      pathLength={1}
+                      d="M2 8.5C48 3.5 104 2 150 4.5C196 7 252 9 298 4"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </h1>
+            </RevealItem>
 
-            <motion.p
-              variants={enter}
-              className="mt-5 max-w-[46ch] text-[17px] leading-[1.95] text-ink-2 sm:text-[20px]"
-            >
-              {HERO.subtitle}
-            </motion.p>
+            <RevealItem>
+              <p className="mt-5 max-w-[46ch] text-[17px] leading-[1.95] text-ink-2 sm:text-[20px]">
+                {HERO.subtitle}
+              </p>
+            </RevealItem>
 
-            <motion.div variants={enter} className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <RevealItem className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Cta
                 label={HERO.primaryCta.label}
                 target={HERO.primaryCta.target}
@@ -114,11 +104,10 @@ export function Hero() {
                 icon={<Play className="size-4 fill-current" strokeWidth={0} aria-hidden />}
                 className="h-[60px] min-h-[60px] w-full px-7 text-[19px] sm:w-auto"
               />
-            </motion.div>
+            </RevealItem>
 
-            {/* highlights */}
-            <motion.ul
-              variants={enter}
+            <RevealItem
+              as="ul"
               className="mt-9 grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-line pt-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-6"
             >
               {HERO.highlights.map((h, i) => (
@@ -129,14 +118,11 @@ export function Hero() {
                   <span className="text-[16px] font-medium text-ink-2">{h}</span>
                 </li>
               ))}
-            </motion.ul>
-          </motion.div>
+            </RevealItem>
+          </RevealGroup>
 
           {/* ── Mockup ─────────────────────────────────────────── */}
-          <motion.div
-            style={{ y: mockupY }}
-            className="relative flex items-center justify-center"
-          >
+          <div className="relative flex items-center justify-center">
             {/* soft stage behind the device */}
             <div
               aria-hidden
@@ -159,6 +145,10 @@ export function Hero() {
                 ratio="195 / 233"
                 tone="violet"
                 rounded="rounded-2xl"
+                /* Above the fold: fetched with the document rather than after
+                   the lazy-loading observer has had a chance to run. */
+                priority
+                sizes="150px"
               />
             </Float>
 
@@ -176,22 +166,19 @@ export function Hero() {
                 ratio="1 / 1"
                 tone="violet"
                 rounded="rounded-2xl"
+                priority
+                sizes="124px"
               />
             </Float>
 
             {/* floating AI chip */}
-            <motion.div
-              className="absolute left-0 top-[46%] hidden items-center gap-2 rounded-full border border-line bg-card/90 px-3 py-2 shadow-e3 backdrop-blur-sm md:flex lg:left-[-2%]"
-              initial={{ opacity: 0, scale: 0.85, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 1.1 }}
-            >
+            <div className="kp-chip-in absolute left-0 top-[46%] hidden items-center gap-2 rounded-full border border-line bg-card/90 px-3 py-2 shadow-e3 backdrop-blur-sm md:flex lg:left-[-2%]">
               <span className="grid size-7 place-items-center rounded-full bg-violet text-white">
                 <Icon name="brain" className="size-3.5" strokeWidth={2} />
               </span>
               <span className="text-[15px] font-semibold text-ink">مطابق سلیقه تو</span>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
