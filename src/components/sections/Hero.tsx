@@ -24,7 +24,7 @@ export function Hero() {
       id="hero"
       /* Trailing space comes from the shared rhythm; the top padding is the
          hero's alone, clearing the fixed header. */
-      className="section-rhythm relative overflow-hidden pt-28 sm:pt-32 md:pt-40"
+      className="section-rhythm relative overflow-hidden pt-24 sm:pt-32 md:pt-40"
     >
       {/* ── Backdrop ─────────────────────────────────────────────── */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
@@ -51,7 +51,7 @@ export function Hero() {
             amount={0.05}
           >
             <RevealItem>
-              <h1 className="text-[30px] font-extrabold leading-[1.42] tracking-[-0.015em] text-ink min-[400px]:text-[34px] sm:text-[44px] md:text-[52px]">
+              <h1 className="text-[27px] font-extrabold leading-[1.42] tracking-[-0.015em] text-ink min-[400px]:text-[31px] sm:text-[44px] md:text-[52px]">
                 {HERO.titleLead}
                 <br />
                 <span className="relative inline-block text-violet">
@@ -78,7 +78,7 @@ export function Hero() {
             </RevealItem>
 
             <RevealItem>
-              <p className="mt-5 max-w-[46ch] text-[17px] leading-[1.95] text-ink-2 sm:text-[20px]">
+              <p className="mt-5 max-w-[46ch] text-[17px] leading-[1.72] sm:leading-[1.95] text-ink-2 sm:text-[20px]">
                 {HERO.subtitle}
               </p>
             </RevealItem>
@@ -126,7 +126,7 @@ export function Hero() {
             {/* soft stage behind the device */}
             <div
               aria-hidden
-              className="absolute left-1/2 top-1/2 -z-10 size-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(154,162,255,0.40)_0%,rgba(249,248,245,0)_68%)] sm:size-[520px]"
+              className="absolute left-1/2 top-1/2 -z-10 size-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(154,162,255,0.40)_0%,rgba(247,248,252,0)_68%)] sm:size-[520px]"
             />
 
             <HeroMockup />

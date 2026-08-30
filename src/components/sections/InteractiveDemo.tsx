@@ -142,7 +142,7 @@ export function InteractiveDemo() {
             </div>
 
             {/* ── Console ────────────────────────────────────────── */}
-            <div className="mt-12 grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,290px)]">
+            <div className="mt-8 grid sm:mt-12 grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,290px)]">
               {/* Voices */}
               <Reveal
                 className={cn("rounded-lg p-5 ring-1", surface)}

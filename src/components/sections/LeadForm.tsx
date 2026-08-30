@@ -301,7 +301,7 @@ export function LeadForm() {
                       ? LEAD_FORM_COPY.successTitle
                       : LEAD_FORM_COPY.duplicateTitle}
                   </h3>
-                  <p className="mt-2.5 max-w-[34ch] text-[17px] leading-[2] text-muted">
+                  <p className="mt-2.5 max-w-[34ch] text-[17px] leading-[1.75] sm:leading-[2] text-muted">
                     {phase === "success"
                       ? LEAD_FORM_COPY.successBody
                       : LEAD_FORM_COPY.duplicateBody}

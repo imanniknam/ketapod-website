@@ -72,7 +72,7 @@ export function Faq() {
         }
       />
 
-      <div className="mt-12 grid gap-x-10 gap-y-0 md:grid-cols-2">
+      <div className="mt-8 grid sm:mt-12 gap-x-10 gap-y-0 md:grid-cols-2">
         {COLUMNS.map((column, ci) => (
           <div key={ci} className="border-t border-line">
             {column.map((item, i) => (
@@ -162,7 +162,7 @@ function FaqRow({
         style={{ gridTemplateRows: open ? "1fr" : "0fr", opacity: open ? 1 : 0 }}
       >
         <div className="overflow-hidden">
-          <p className="ms-10 me-2 border-s-2 border-violet-200 pb-6 ps-4 text-[16px] leading-[2.05] text-muted">
+          <p className="ms-10 me-2 border-s-2 border-violet-200 pb-6 ps-4 text-[16px] leading-[1.78] sm:leading-[2.05] text-muted">
             {answer}
           </p>
         </div>

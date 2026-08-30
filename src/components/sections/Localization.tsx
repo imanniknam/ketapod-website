@@ -154,7 +154,7 @@ export function Localization() {
       </div>
 
       {/* full-bleed ticker of local topics — the section's closing beat */}
-      <div className="mt-16 border-y border-line bg-paper-2/60 py-4">
+      <div className="mt-10 border-y sm:mt-16 border-line bg-paper-2/60 py-4">
         <Marquee speed={40}>
           {[...data.localTopics, ...data.languages.map((l) => l.label)].map((t, i) => (
             <span key={`${t}-${i}`} className="flex items-center gap-3 whitespace-nowrap">

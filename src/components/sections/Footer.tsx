@@ -33,7 +33,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <BrandMark tone="night" animated={false} size={40} />
-            <p className="mt-5 max-w-[34ch] text-[16px] leading-[2] text-night-muted">
+            <p className="mt-5 max-w-[34ch] text-[16px] leading-[1.75] sm:leading-[2] text-night-muted">
               {FOOTER.brandDescription}
             </p>
 

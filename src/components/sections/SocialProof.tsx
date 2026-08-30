@@ -73,7 +73,7 @@ export function SocialProof() {
 
         {/* ── Stats line ───────────────────────────────────────── */}
         <RevealGroup
-          className="mt-12 grid grid-cols-2 gap-x-6 gap-y-5 border-y border-line py-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-10"
+          className="mt-8 grid sm:mt-12 grid-cols-2 gap-x-6 gap-y-5 border-y border-line py-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-10"
           stagger={0.06}
           amount={0.4}
         >
@@ -108,7 +108,7 @@ export function SocialProof() {
               style={{ marginTop: i % 2 === 1 ? 26 : 0 }}
             >
               <motion.figure
-                className="w-[300px] rounded-lg border border-line bg-card p-6 shadow-e2 sm:w-[340px]"
+                className="w-[300px] rounded-lg border border-line bg-card p-5 shadow-e2 sm:p-6 sm:w-[340px]"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
@@ -120,7 +120,7 @@ export function SocialProof() {
                   strokeWidth={1.6}
                   aria-hidden
                 />
-                <blockquote className="mt-4 text-[17px] leading-[2] text-ink-2">
+                <blockquote className="mt-4 text-[17px] leading-[1.75] sm:leading-[2] text-ink-2">
                   {t.message}
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-5">

@@ -26,13 +26,13 @@ export function WhyUs() {
       />
 
       <RevealGroup
-        className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="mt-9 grid sm:mt-14 gap-4 sm:grid-cols-2 lg:grid-cols-4"
         stagger={0.08}
         amount={0.15}
       >
         {WHY_US.map((item, i) => (
           <RevealItem key={item.id}>
-            <article className="group lift relative h-full cursor-default overflow-hidden rounded-lg border border-line bg-card p-6 shadow-e1 transition-[border-color,box-shadow,transform] duration-300 hover:border-violet-200 hover:shadow-e3">
+            <article className="group lift relative h-full cursor-default overflow-hidden rounded-lg border border-line bg-card p-5 shadow-e1 sm:p-6 transition-[border-color,box-shadow,transform] duration-300 hover:border-violet-200 hover:shadow-e3">
               {/* corner arc reveals on hover — a drawn detail, not a glow */}
               <svg
                 aria-hidden
@@ -62,7 +62,7 @@ export function WhyUs() {
               </div>
 
               <h3 className="mt-5 text-[20px] font-bold text-ink">{item.title}</h3>
-              <p className="mt-2.5 text-[16px] leading-[1.95] text-muted">{item.description}</p>
+              <p className="mt-2.5 text-[16px] leading-[1.72] sm:leading-[1.95] text-muted">{item.description}</p>
             </article>
           </RevealItem>
         ))}

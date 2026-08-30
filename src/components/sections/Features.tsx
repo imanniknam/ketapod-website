@@ -31,13 +31,16 @@ export function Features() {
       />
 
       <RevealGroup
-        className="mt-14 grid auto-rows-[minmax(168px,auto)] grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4"
+        /* The row floor pads short tiles out to a shared height so the bento
+           lines up. Stacked one per row on a phone there is nothing to line
+           them up with, so it only adds empty space — eight times over. */
+        className="mt-9 grid grid-cols-1 gap-3.5 sm:mt-14 sm:auto-rows-[minmax(168px,auto)] sm:grid-cols-2 lg:grid-cols-4"
         stagger={0.06}
         amount={0.1}
       >
         {/* ── Lead tile ─────────────────────────────────────── */}
         <RevealItem className="sm:col-span-2 lg:row-span-2">
-          <article className="group lift relative flex h-full flex-col justify-between overflow-hidden rounded-lg bg-violet p-7 text-white shadow-violet md:p-8">
+          <article className="group lift relative flex h-full flex-col justify-between overflow-hidden rounded-lg bg-violet p-6 text-white shadow-violet sm:p-7 md:p-8">
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_100%_at_15%_0%,rgba(255,255,255,0.22)_0%,transparent_55%)]"
@@ -57,7 +60,7 @@ export function Features() {
               <h3 className="mt-6 text-[25px] font-bold leading-[1.5] md:text-[30px]">
                 {lead.title}
               </h3>
-              <p className="mt-3 max-w-[34ch] text-[17px] leading-[2] text-white/80">
+              <p className="mt-3 max-w-[34ch] text-[17px] leading-[1.75] sm:leading-[2] text-white/80">
                 {lead.description}
               </p>
             </div>
@@ -71,10 +74,10 @@ export function Features() {
         {/* ── Supporting tiles ──────────────────────────────── */}
         {rest.map((f) => (
           <RevealItem key={f.id}>
-            <article className="group lift relative flex h-full cursor-default flex-col rounded-lg border border-line bg-card p-6 shadow-e1 transition-[border-color,box-shadow,transform] duration-300 hover:border-violet-200 hover:shadow-e3">
+            <article className="group lift relative flex h-full cursor-default flex-col rounded-lg border border-line bg-card p-5 shadow-e1 sm:p-6 transition-[border-color,box-shadow,transform] duration-300 hover:border-violet-200 hover:shadow-e3">
               <IconChip name={f.icon} tilt />
               <h3 className="mt-4 text-[18px] font-bold text-ink">{f.title}</h3>
-              <p className="mt-2 text-[16px] leading-[1.95] text-muted">{f.description}</p>
+              <p className="mt-2 text-[16px] leading-[1.72] sm:leading-[1.95] text-muted">{f.description}</p>
             </article>
           </RevealItem>
         ))}

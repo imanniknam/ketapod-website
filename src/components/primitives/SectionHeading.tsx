@@ -79,7 +79,7 @@ export function SectionHeading({
 
         <h2
           className={cn(
-            "max-w-[19ch] text-[32px] font-bold sm:text-[34px] md:text-[42px]",
+            "max-w-[19ch] text-[27px] font-bold sm:text-[34px] md:text-[42px]",
             night ? "text-night-ink" : "text-ink",
             centered && "max-w-[24ch]",
             /* In its own column the headline may use the whole of it. */
@@ -94,7 +94,7 @@ export function SectionHeading({
         {lead && !twoUp && (
           <p
             className={cn(
-              "max-w-[52ch] text-[17px] leading-[1.95] sm:text-[19px]",
+              "max-w-[52ch] text-[17px] leading-[1.72] sm:leading-[1.95] sm:text-[19px]",
               night ? "text-night-muted" : "text-muted",
             )}
           >
@@ -110,7 +110,7 @@ export function SectionHeading({
           {lead && (
             <p
               className={cn(
-                "max-w-[52ch] text-[17px] leading-[1.95] sm:text-[19px]",
+                "max-w-[52ch] text-[17px] leading-[1.72] sm:leading-[1.95] sm:text-[19px]",
                 night ? "text-night-muted" : "text-muted",
               )}
             >

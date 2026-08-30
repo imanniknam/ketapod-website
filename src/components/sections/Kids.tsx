@@ -29,7 +29,7 @@ export function Kids() {
           <SectionHeading index="05" eyebrow="Kids Experience" title={KIDS.title} lead={KIDS.subtitle} />
 
           <RevealGroup
-            className="mt-10 grid gap-x-8 gap-y-7 sm:grid-cols-2"
+            className="mt-7 grid sm:mt-10 gap-x-8 gap-y-7 sm:grid-cols-2"
             stagger={0.08}
             amount={0.15}
           >
@@ -38,7 +38,7 @@ export function Kids() {
                 <IconChip name={b.icon} size="sm" tilt />
                 <div className="min-w-0">
                   <h3 className="text-[18px] font-bold text-ink">{b.title}</h3>
-                  <p className="mt-1.5 text-[16px] leading-[1.95] text-muted">{b.description}</p>
+                  <p className="mt-1.5 text-[16px] leading-[1.72] sm:leading-[1.95] text-muted">{b.description}</p>
                 </div>
               </RevealItem>
             ))}

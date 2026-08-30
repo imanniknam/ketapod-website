@@ -26,7 +26,7 @@ export function Problem() {
       />
 
       <RevealGroup
-        className="mt-10 grid grid-cols-1 gap-px overflow-hidden rounded-lg bg-night-line/70 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3"
+        className="mt-7 grid grid-cols-1 gap-px overflow-hidden rounded-lg bg-night-line/70 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3"
         stagger={0.07}
         amount={0.12}
       >
@@ -41,7 +41,7 @@ export function Problem() {
             </div>
 
             <h3 className="mt-5 text-[19px] font-bold leading-[1.6] text-night-ink">{p.title}</h3>
-            <p className="mt-2.5 text-[16px] leading-[2] text-night-muted">{p.description}</p>
+            <p className="mt-2.5 text-[16px] leading-[1.75] sm:leading-[2] text-night-muted">{p.description}</p>
           </RevealItem>
         ))}
       </RevealGroup>

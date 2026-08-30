@@ -130,6 +130,21 @@
     overflow-x: clip;
   }
 
+  /*
+   * Phones read the same copy through a third of the width, so every
+   * measurement set for a desktop column turns into three times the lines and
+   * three times the leading. 1.85 at 18px is 33px a line; over a page this
+   * long that is most of the reason it never ends.
+   *
+   * Persian still needs more air than Latin — this is 1.72, not 1.4.
+   */
+  @media (max-width: 639px) {
+    body {
+      font-size: 17px;
+      line-height: 1.72;
+    }
+  }
+
   /* Persian display type wants a little air, but tighter than body */
   h1,
   h2,
@@ -423,8 +438,8 @@
     position: relative;
     overflow: hidden;
     border-radius: var(--radius-2xl);
-    padding-inline: 20px;
-    padding-block: 48px;
+    padding-inline: 18px;
+    padding-block: 32px;
     @media (min-width: 640px) {
       padding-inline: 32px;
       padding-block: 56px;
@@ -444,9 +459,12 @@
      distance between the next two — the single loudest reason the page read as
      a stack of separately-built strips rather than one document. */
   .section-rhythm {
-    padding-block-end: 96px;
+    /* Eleven sections, so this number is multiplied by eleven before anyone
+       reaches the footer. A phone also shows far less at once, which makes a
+       generous gap read as a dead screen rather than as breathing room. */
+    padding-block-end: 60px;
     @media (min-width: 640px) {
-      padding-block-end: 112px;
+      padding-block-end: 104px;
     }
     @media (min-width: 768px) {
       padding-block-end: 144px;
