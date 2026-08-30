@@ -42,7 +42,7 @@ export function Localization() {
 
   return (
     <section id="localization" className="section-rhythm relative overflow-hidden">
-      <Aura tone="violet" mark="orbit" className="left-[-14%] top-8 hidden md:block" size="size-[440px]" />
+      <Aura mark="orbit" className="left-[-14%] top-8 hidden md:block" size="size-[440px]" />
       <div className="container-k">
         <div className="grid items-start gap-14 lg:grid-cols-[1fr_0.9fr] lg:gap-10">
           {/* ── Copy + controls ────────────────────────────────── */}

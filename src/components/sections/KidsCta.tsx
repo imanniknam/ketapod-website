@@ -11,14 +11,14 @@ import { openLeadForm } from "@/lib/leadIntent";
  * It doesn't just scroll: it hands the lead form a `parent` user type and a
  * `kids` interest, so the form arrives already shaped around who clicked it.
  *
- * The button itself is `btn btn-amber` — a member of the same family as every
- * other CTA on the page, rather than the one-off it used to be.
+ * The button is `btn btn-violet` — the same primary CTA as the hero and the
+ * final panel. It used to be a one-off amber button with its own hex values.
  */
 export function KidsCta() {
   return (
     <button
       type="button"
-      className="btn btn-amber cursor-pointer"
+      className="btn btn-violet cursor-pointer"
       onClick={() => {
         trackEvent("kids_cta_clicked", "kids", "primary_cta", {
           target: "lead-form",

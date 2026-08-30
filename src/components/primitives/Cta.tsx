@@ -6,14 +6,13 @@ import { trackEvent } from "@/lib/api";
 import { openLeadForm, type LeadIntent } from "@/lib/leadIntent";
 import { cn, scrollToSection } from "@/lib/utils";
 
-type Variant = "primary" | "violet" | "ghost" | "onnight" | "amber";
+type Variant = "primary" | "violet" | "ghost" | "onnight";
 
 const VARIANT_CLASS: Record<Variant, string> = {
   primary: "btn-primary",
   violet: "btn-violet",
   ghost: "btn-ghost",
   onnight: "btn-onnight",
-  amber: "btn-amber",
 };
 
 /**

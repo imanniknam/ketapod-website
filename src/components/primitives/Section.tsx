@@ -3,30 +3,32 @@ import { cn } from "@/lib/utils";
 
 /**
  * `plain` — content sits directly on the page's paper.
- * `night` / `warm` / `deep` — content sits inside a boxed panel.
+ * `light` / `night` / `deep` — content sits inside a boxed panel.
  *
- * The three panels are deliberately one thing with three hues rather than three
- * designs: same radius, same padding scale, same atmosphere (a dot grid and two
- * wide washes). Before this, Problem, Kids and Final CTA each invented their
- * own, which is most of why the page read as separately-designed strips.
+ * The three panels are deliberately one design at three brightnesses rather
+ * than three designs: same radius, same padding scale, same atmosphere (a dot
+ * grid and two wide washes), and all three on the violet ramp. Before this,
+ * Problem, Kids and Final CTA each invented their own, which is most of why the
+ * page read as separately-designed strips.
  */
-export type Shell = "plain" | "night" | "warm" | "deep";
+export type Shell = "plain" | "light" | "night" | "deep";
 
 const PANEL_SURFACE: Record<Exclude<Shell, "plain">, string> = {
+  light:
+    "bg-[linear-gradient(200deg,var(--color-violet-50)_0%,var(--color-paper)_50%,var(--color-violet-50)_100%)] ring-1 ring-inset ring-violet-100",
   night: "bg-night",
-  warm: "bg-[linear-gradient(200deg,var(--color-amber-50)_0%,var(--color-paper)_46%,var(--color-violet-50)_100%)] ring-1 ring-inset ring-amber/20",
   deep: "bg-[linear-gradient(215deg,#1A1A5E_0%,#101140_48%,var(--color-night)_100%)]",
 };
 
-/** Wash pair per panel. Structure is identical; only the hue moves. */
+/** Wash pair per panel. Structure is identical; only the value moves. */
 const PANEL_WASH: Record<Exclude<Shell, "plain">, [string, string]> = {
+  light: [
+    "bg-[radial-gradient(circle,rgba(42,56,255,0.16)_0%,transparent_68%)]",
+    "bg-[radial-gradient(circle,rgba(110,120,255,0.20)_0%,transparent_70%)]",
+  ],
   night: [
     "bg-[radial-gradient(circle,rgba(42,56,255,0.30)_0%,transparent_66%)]",
-    "bg-[radial-gradient(circle,rgba(255,176,32,0.11)_0%,transparent_66%)]",
-  ],
-  warm: [
-    "bg-[radial-gradient(circle,rgba(255,176,32,0.22)_0%,transparent_68%)]",
-    "bg-[radial-gradient(circle,rgba(42,56,255,0.14)_0%,transparent_70%)]",
+    "bg-[radial-gradient(circle,rgba(110,120,255,0.16)_0%,transparent_66%)]",
   ],
   deep: [
     "bg-[radial-gradient(circle,rgba(110,120,255,0.34)_0%,transparent_66%)]",
@@ -35,8 +37,8 @@ const PANEL_WASH: Record<Exclude<Shell, "plain">, [string, string]> = {
 };
 
 const DOTS: Record<Exclude<Shell, "plain">, string> = {
+  light: "text-violet/[0.10]",
   night: "text-white/[0.05]",
-  warm: "text-amber/[0.14]",
   deep: "text-white/[0.06]",
 };
 

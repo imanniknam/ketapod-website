@@ -15,7 +15,7 @@ const tile = (id: string): string | undefined => ASSETS[`whyUs.${id}` as keyof t
 export function WhyUs() {
   return (
     <Section id="why-us" className="overflow-hidden">
-      <Aura tone="violet" mark="orbit" className="-top-24 left-[-12%] hidden md:block" size="size-[460px]" />
+      <Aura mark="orbit" className="-top-24 left-[-12%] hidden md:block" size="size-[460px]" />
 
       <SectionHeading
         index="01"

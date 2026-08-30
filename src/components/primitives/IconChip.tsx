@@ -1,12 +1,15 @@
 import { Icon } from "./Icon";
 import { cn } from "@/lib/utils";
 
-type Tone = "paper" | "night" | "amber" | "violet";
+/* One tone per surface, not per section mood — `paper` on the page, `night` on
+   a dark panel, `violet` on the solid violet tile. There is deliberately no
+   accent tone: a section that wants to feel different should say so with its
+   content, not by recolouring the furniture. */
+type Tone = "paper" | "night" | "violet";
 
 const TONE: Record<Tone, string> = {
   paper: "chip-paper",
   night: "chip-night",
-  amber: "chip-amber",
   violet: "chip-violet",
 };
 

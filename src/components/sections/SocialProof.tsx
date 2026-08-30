@@ -51,10 +51,7 @@ export function SocialProof() {
 
   return (
     <section id="social-proof" className="section-rhythm relative overflow-hidden">
-      {/* Violet, like every other section aura. Amber now means "kids" and
-          nothing else — an amber wash here was a large part of why the page's
-          temperature seemed to change from section to section. */}
-      <Aura tone="violet" mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
+      <Aura mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
       <div className="container-k">
         <SectionHeading
           index="07"

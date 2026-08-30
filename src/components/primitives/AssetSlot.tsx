@@ -2,18 +2,16 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "violet" | "amber" | "mint" | "night";
+/* Only what the page actually uses. The amber tone went with the amber kids
+   section; leaving it here would just be a one-prop route back to the
+   inconsistency. */
+type Tone = "violet" | "mint" | "night";
 
 const TONES: Record<Tone, { wash: string; ink: string; ring: string }> = {
   violet: {
     wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#efe9ff_0%,#f8f5ff_55%,#faf8f4_100%)]",
     ink: "text-violet-700",
     ring: "ring-violet-200/70",
-  },
-  amber: {
-    wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#fdf1d9_0%,#fdf8ee_55%,#faf8f4_100%)]",
-    ink: "text-amber-ink",
-    ring: "ring-amber-100",
   },
   mint: {
     wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#ddf1e8_0%,#f1f9f5_55%,#faf8f4_100%)]",

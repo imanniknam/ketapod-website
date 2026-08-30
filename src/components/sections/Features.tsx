@@ -20,7 +20,7 @@ const [lead, ...rest] = FEATURES;
 export function Features() {
   return (
     <Section id="features" className="overflow-hidden">
-      <Aura tone="violet" mark="arc" className="right-[-10%] top-16 hidden md:block" size="size-[380px]" />
+      <Aura mark="arc" className="right-[-10%] top-16 hidden md:block" size="size-[380px]" />
 
       <SectionHeading
         index="03"

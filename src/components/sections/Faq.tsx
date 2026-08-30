@@ -29,7 +29,7 @@ export function Faq() {
 
   return (
     <Section id="faq" className="overflow-hidden">
-      <Aura tone="violet" mark="dots" className="left-[-10%] top-32 hidden lg:block" size="size-[340px]" />
+      <Aura mark="dots" className="left-[-10%] top-32 hidden lg:block" size="size-[340px]" />
       {/* Decorative, outside the reading column, desktop only. */}
       <Float
         className="pointer-events-none absolute right-1 top-56 hidden w-[92px] xl:block 2xl:right-6 2xl:w-[104px]"

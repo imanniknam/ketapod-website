@@ -11,16 +11,18 @@ import { KIDS } from "@/lib/content";
 /**
  * Section 8 — Kids.
  *
- * The warm counterpoint on the page. It keeps its amber identity, but it now
- * wears the same panel as Problem and Final CTA and the same chips, heading and
- * button family as everything else — the warmth is the only thing that differs,
- * which is what it was supposed to be all along. Previously this section had a
- * hand-mixed gradient, its own border colour, its own button hexes and its own
- * icon treatment, and read as if it had been designed by someone else.
+ * On the page's palette like everything else. It used to be the one amber
+ * section — hand-mixed gradient, amber border, amber chips and a button built
+ * from raw hexes — and that alone made it read as if it had been designed
+ * separately. What marks it as the kids section now is the copy, the icons and
+ * the 3D scene, not a second colour scheme.
+ *
+ * The light panel still gives it a lift against the dark demo above it; it just
+ * takes that lift from the violet ramp the rest of the page is set in.
  */
 export function Kids() {
   return (
-    <Section id="kids" shell="warm">
+    <Section id="kids" shell="light">
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_0.85fr]">
         {/* ── Copy ─────────────────────────────────────────────── */}
         <div>
@@ -33,7 +35,7 @@ export function Kids() {
           >
             {KIDS.benefits.map((b) => (
               <RevealItem key={b.id} className="group flex gap-3.5">
-                <IconChip name={b.icon} tone="amber" size="sm" tilt />
+                <IconChip name={b.icon} size="sm" tilt />
                 <div className="min-w-0">
                   <h3 className="text-[18px] font-bold text-ink">{b.title}</h3>
                   <p className="mt-1.5 text-[16px] leading-[1.95] text-muted">{b.description}</p>
@@ -58,14 +60,14 @@ export function Kids() {
               alt="تصویر سه‌بعدی کودک در حال گوش دادن"
               label="کودک با هدفون — رندر سه‌بعدی اصلی این سکشن"
               ratio="328 / 294"
-              tone="amber"
+              tone="violet"
               rounded="rounded-2xl"
               sizes="(max-width: 1024px) 380px, 380px"
             />
           </Float>
 
           {/* floating chips that sell the scenario */}
-          <span className="absolute -right-2 top-8 hidden rounded-full border border-amber/30 bg-white/90 px-3 py-2 text-[15px] font-semibold text-ink shadow-e2 backdrop-blur-sm sm:block">
+          <span className="absolute -right-2 top-8 hidden rounded-full border border-violet-100 bg-white/90 px-3 py-2 text-[15px] font-semibold text-ink shadow-e2 backdrop-blur-sm sm:block">
             قصه شب · ۸ دقیقه
           </span>
           <span className="absolute -left-2 bottom-10 hidden items-center gap-2 rounded-full border border-violet-100 bg-white/90 px-3 py-2 text-[15px] font-semibold text-ink shadow-e2 backdrop-blur-sm sm:flex">
