@@ -12,8 +12,16 @@ import { useDemoPlayer } from "@/hooks/useDemoPlayer";
 import { EASE_OUT_EXPO, springSoft } from "@/lib/motion";
 import { cn, formatTime } from "@/lib/utils";
 
+/*
+ * Kids mode used to repaint the console cream-and-amber, which made it the
+ * second warm area on an otherwise violet page. The state still has to be
+ * unmistakable, so it keeps the thing that actually carried it — the console
+ * flips from dark to light — and takes the light value from the violet ramp
+ * instead of introducing a hue. The rounder radii and the changed copy do the
+ * rest; none of that depended on the colour.
+ */
 const PANEL_DARK = "#101338";
-const PANEL_KIDS = "#FFF6E6";
+const PANEL_KIDS = "#EFF1FF";
 
 /**
  * Section 7 — Interactive Demo.
@@ -76,7 +84,7 @@ export function InteractiveDemo() {
               initial={false}
               animate={{
                 background: kids
-                  ? "radial-gradient(circle, rgba(255,176,32,0.32) 0%, transparent 66%)"
+                  ? "radial-gradient(circle, rgba(42,56,255,0.18) 0%, transparent 68%)"
                   : "radial-gradient(circle, rgba(110,120,255,0.34) 0%, transparent 66%)",
               }}
               transition={{ duration: 0.55 }}
@@ -84,7 +92,7 @@ export function InteractiveDemo() {
             <div
               className={cn(
                 "dotgrid absolute inset-0 transition-colors duration-500",
-                kids ? "text-amber/15" : "text-white/[0.06]",
+                kids ? "text-violet/[0.10]" : "text-white/[0.06]",
               )}
             />
           </div>
@@ -122,7 +130,7 @@ export function InteractiveDemo() {
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold ring-1",
                     kids
-                      ? "bg-amber-100 text-amber-ink ring-amber/30"
+                      ? "bg-violet-100 text-violet-700 ring-violet-200"
                       : "bg-white/10 text-violet-200 ring-white/15",
                   )}
                 >
@@ -163,11 +171,9 @@ export function InteractiveDemo() {
                             "flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-right transition-colors duration-200",
                             v.available ? "cursor-pointer" : "cursor-not-allowed opacity-40",
                             active
-                              ? kids
-                                ? "bg-amber text-white"
-                                : "bg-violet text-white"
+                              ? "bg-violet text-white"
                               : kids
-                                ? "hover:bg-amber-100"
+                                ? "hover:bg-violet-100"
                                 : "hover:bg-white/10",
                           )}
                           aria-pressed={active}
@@ -178,7 +184,7 @@ export function InteractiveDemo() {
                               active
                                 ? "bg-white/20 text-white ring-white/30"
                                 : kids
-                                  ? "bg-amber-100 text-amber-ink ring-amber/25"
+                                  ? "bg-violet-100 text-violet-700 ring-violet-200"
                                   : "bg-white/10 text-violet-200 ring-white/10",
                             )}
                           >
@@ -205,7 +211,7 @@ export function InteractiveDemo() {
                             </span>
                           </span>
                           {recommended && !active && (
-                            <span className="shrink-0 rounded-full bg-amber px-2 py-0.5 text-[13px] font-bold text-white">
+                            <span className="shrink-0 rounded-full bg-violet px-2 py-0.5 text-[13px] font-bold text-white">
                               پیشنهاد
                             </span>
                           )}
@@ -249,7 +255,7 @@ export function InteractiveDemo() {
                       className={cn(
                         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[13px] font-semibold",
                         kids
-                          ? "bg-amber-100 text-amber-ink"
+                          ? "bg-violet-100 text-violet-700"
                           : "bg-violet/25 text-violet-200",
                       )}
                     >
@@ -272,7 +278,7 @@ export function InteractiveDemo() {
                     bars={38}
                     active={isPlaying}
                     seed={17}
-                    className={cn("h-14", kids ? "text-amber/45" : "text-violet-200/35")}
+                    className={cn("h-14", kids ? "text-violet/45" : "text-violet-200/35")}
                     barClassName="w-[3px]"
                   />
                 </div>
@@ -307,10 +313,10 @@ export function InteractiveDemo() {
                     transition={springSoft}
                     className={cn(
                       "grid size-16 place-items-center rounded-full text-white transition-colors duration-200",
+                      /* The play button is the same in both modes now — it was
+                         only ever branching to swap violet for amber. */
                       canPlay
-                        ? kids
-                          ? "cursor-pointer bg-amber shadow-e3 hover:bg-amber-600"
-                          : "cursor-pointer bg-violet shadow-violet hover:bg-violet-600"
+                        ? "cursor-pointer bg-violet shadow-violet hover:bg-violet-600"
                         : "cursor-not-allowed bg-white/15 text-white/40",
                     )}
                   >
@@ -373,10 +379,10 @@ export function InteractiveDemo() {
                               "flex w-full cursor-pointer items-center gap-3 rounded-sm p-2 text-right transition-colors duration-200",
                               active
                                 ? kids
-                                  ? "bg-amber-100 ring-1 ring-amber/40"
+                                  ? "bg-violet-100 ring-1 ring-violet-200"
                                   : "bg-white/12 ring-1 ring-white/20"
                                 : kids
-                                  ? "hover:bg-amber-100/60"
+                                  ? "hover:bg-violet-50"
                                   : "hover:bg-white/[0.07]",
                             )}
                             aria-pressed={active}
@@ -397,7 +403,7 @@ export function InteractiveDemo() {
                                 className={cn(
                                   "mt-1 inline-block rounded-full px-2 py-0.5 text-[13px] font-semibold",
                                   isKidsItem && kids
-                                    ? "bg-amber text-white"
+                                    ? "bg-violet text-white"
                                     : kids
                                       ? "bg-white text-muted ring-1 ring-line"
                                       : "bg-white/10 text-night-muted",
@@ -440,13 +446,13 @@ export function InteractiveDemo() {
                         <div
                           className={cn(
                             "mt-2 h-1 overflow-hidden rounded-full",
-                            kids ? "bg-amber-100" : "bg-white/12",
+                            kids ? "bg-violet-100" : "bg-white/12",
                           )}
                         >
                           <motion.span
                             className={cn(
                               "block h-full rounded-full",
-                              kids ? "bg-amber" : "bg-violet-200",
+                              kids ? "bg-violet" : "bg-violet-200",
                             )}
                             initial={{ width: 0 }}
                             whileInView={{
@@ -506,7 +512,7 @@ function KidsToggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
       className={cn(
         "flex cursor-pointer items-center gap-2.5 rounded-full py-1.5 pe-2 ps-3.5 text-[15px] font-semibold ring-1 transition-colors duration-300",
         on
-          ? "bg-amber text-white ring-amber"
+          ? "bg-violet text-white ring-violet"
           : "bg-white/10 text-night-ink ring-white/15 hover:bg-white/15",
       )}
     >
@@ -549,13 +555,13 @@ function ProgressBar({
       <div
         className={cn(
           "pointer-events-none absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 overflow-hidden rounded-full",
-          kids ? "bg-amber/20" : "bg-white/12",
+          kids ? "bg-violet/20" : "bg-white/12",
         )}
       >
         <span
           className={cn(
             "block h-full rounded-full transition-[width] duration-150",
-            kids ? "bg-amber" : "bg-violet-200",
+            kids ? "bg-violet" : "bg-violet-200",
           )}
           style={{ width: `${pct}%` }}
         />
@@ -564,7 +570,7 @@ function ProgressBar({
         aria-hidden
         className={cn(
           "pointer-events-none absolute top-1/2 size-3 -translate-y-1/2 translate-x-1/2 rounded-full shadow-e2 transition-transform duration-200",
-          kids ? "bg-amber" : "bg-white",
+          kids ? "bg-violet" : "bg-white",
           disabled ? "opacity-0" : "scale-0 group-hover:scale-100",
         )}
         style={{ right: `${pct}%` }}

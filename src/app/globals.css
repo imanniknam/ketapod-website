@@ -40,8 +40,8 @@
 
   /* — Accents ————————————————————————————————
      Violet is the page's only accent. These three are *state* colours and each
-     has exactly one job: amber = the demo's kids mode and the duplicate-lead
-     warning, mint = safety and success, rose = error.
+     has exactly one job: amber = warning (the duplicate-lead notice), mint =
+     safety and success, rose = error.
 
      No section decorates with them. Sections are violet, full stop — the moment
      one of them picks a second hue for atmosphere, it stops looking like part
@@ -49,7 +49,6 @@
   --color-mint: #17b67c;
   --color-mint-100: #d6f5e8;
   --color-amber: #ffb020;
-  --color-amber-600: #e5a52f;
   --color-amber-100: #fff1d6;
   --color-rose: #e0685f;
   --color-rose-100: #fbe4e2;
