@@ -12,7 +12,7 @@ import {
   getSocialProof,
   type SocialProofData,
 } from "@/lib/api";
-import { springSoft } from "@/lib/motion";
+import { LIFT, springSoft } from "@/lib/motion";
 import { cn, faFigure } from "@/lib/utils";
 
 const AVATAR_TINTS = [
@@ -88,65 +88,69 @@ export function SocialProof() {
       </div>
 
       {/* ── Testimonial rail (full-bleed) ──────────────────────── */}
-      <Reveal delay={0.05} className="container-k mt-10">
-        {/* Starts flush with the page grid, bleeds off the far edge so the rail
-            reads as "there is more" rather than as a broken margin. */}
+      <Reveal delay={0.05} className="mt-10">
         <div
           ref={railRef}
-          className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-10 pt-6"
-          style={{
-            marginInlineEnd: "calc(50% - 50vw)",
-            paddingInlineEnd: 24,
-            scrollPaddingInlineStart: 0,
-          }}
+          className="rail-bleed no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-10 pt-6"
         >
           {data.testimonials.map((t, i) => (
-            <motion.figure
+            /*
+             * The stagger is a margin on this wrapper, and the hover is a
+             * transform on the card inside it. They used to be on the same
+             * element, where they fought: the card's resting offset was a
+             * 26px margin but the hover animated `y` to 21, so every other
+             * card jumped *down* 21px on hover instead of lifting 5.
+             */
+            <div
               key={t.id}
-              className="w-[300px] shrink-0 snap-start rounded-lg border border-line bg-card p-6 shadow-e2 sm:w-[340px]"
+              className="shrink-0 snap-start"
               style={{ marginTop: i % 2 === 1 ? 26 : 0 }}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ ...springSoft, delay: 0.05 * i }}
-              whileHover={prefersReduced ? undefined : { y: (i % 2 === 1 ? 26 : 0) - 5 }}
             >
-              <Quote
-                className="size-7 rotate-180 text-violet/25"
-                strokeWidth={1.6}
-                aria-hidden
-              />
-              <blockquote className="mt-4 text-[17px] leading-[2] text-ink-2">
-                {t.message}
-              </blockquote>
-              <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-5">
-                {t.avatarUrl ? (
-                  <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
-                    <Image
-                      src={t.avatarUrl}
-                      alt={t.name}
-                      fill
-                      sizes="44px"
-                      className="object-cover"
-                    />
+              <motion.figure
+                className="w-[300px] rounded-lg border border-line bg-card p-6 shadow-e2 sm:w-[340px]"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ ...springSoft, delay: 0.05 * i }}
+                whileHover={prefersReduced ? undefined : { y: LIFT }}
+              >
+                <Quote
+                  className="size-7 rotate-180 text-violet/25"
+                  strokeWidth={1.6}
+                  aria-hidden
+                />
+                <blockquote className="mt-4 text-[17px] leading-[2] text-ink-2">
+                  {t.message}
+                </blockquote>
+                <figcaption className="mt-6 flex items-center gap-3 border-t border-line pt-5">
+                  {t.avatarUrl ? (
+                    <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
+                      <Image
+                        src={t.avatarUrl}
+                        alt={t.name}
+                        fill
+                        sizes="44px"
+                        className="object-cover"
+                      />
+                    </span>
+                  ) : (
+                    <span
+                      className={cn(
+                        "grid size-11 shrink-0 place-items-center rounded-full text-[18px] font-bold",
+                        AVATAR_TINTS[i % AVATAR_TINTS.length],
+                      )}
+                      aria-hidden
+                    >
+                      {t.name.slice(0, 1)}
+                    </span>
+                  )}
+                  <span>
+                    <span className="block text-[17px] font-bold text-ink">{t.name}</span>
+                    <span className="block text-[15px] text-muted">{t.role}</span>
                   </span>
-                ) : (
-                  <span
-                    className={cn(
-                      "grid size-11 shrink-0 place-items-center rounded-full text-[18px] font-bold",
-                      AVATAR_TINTS[i % AVATAR_TINTS.length],
-                    )}
-                    aria-hidden
-                  >
-                    {t.name.slice(0, 1)}
-                  </span>
-                )}
-                <span>
-                  <span className="block text-[17px] font-bold text-ink">{t.name}</span>
-                  <span className="block text-[15px] text-muted">{t.role}</span>
-                </span>
-              </figcaption>
-            </motion.figure>
+                </figcaption>
+              </motion.figure>
+            </div>
           ))}
         </div>
       </Reveal>

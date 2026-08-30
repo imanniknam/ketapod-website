@@ -177,17 +177,33 @@
    Utilities
    ========================================================================= */
 
+/*
+ * The page grid, as two numbers: a max width and a gutter.
+ *
+ * They live here as custom properties because the full-bleed rail in Social
+ * Proof has to line its first card up with this grid while itself being wider
+ * than it. It can only do that if it can read the same values.
+ */
+:root {
+  --k-max: 1216px;
+  --k-gutter: 16px;
+}
+@media (min-width: 480px) {
+  :root {
+    --k-gutter: 20px;
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --k-gutter: 32px;
+  }
+}
+
 @utility container-k {
   width: 100%;
-  max-width: 1216px;
+  max-width: var(--k-max);
   margin-inline: auto;
-  padding-inline: 16px;
-  @media (min-width: 480px) {
-    padding-inline: 20px;
-  }
-  @media (min-width: 768px) {
-    padding-inline: 32px;
-  }
+  padding-inline: var(--k-gutter);
 }
 
 @utility no-scrollbar {
@@ -429,6 +445,31 @@
     @media (min-width: 768px) {
       padding-block-end: 144px;
     }
+  }
+
+  /* ---- Full-bleed rail ----------------------------------------------
+     A horizontal scroller that starts flush with the page grid and runs off
+     the far edge, so it reads as "there is more" rather than as a broken
+     margin.
+
+     It used to do this from inside the container with
+     `margin-inline-end: calc(50% - 50vw)`. Two problems with that: `vw`
+     counts the scrollbar, so on a desktop browser the rail ended up a few
+     pixels wider than the visible page and hung off the edge; and a negative
+     margin makes the element's real width hard to reason about.
+
+     This version is a full-width element that indents its own start edge by
+     exactly what `container-k` would have — `100%` here is the section's
+     width, which unlike `vw` excludes the scrollbar. `scroll-padding` repeats
+     the indent so a snapped card lands on the grid rather than under it. */
+  .rail-bleed {
+    --rail-indent: max(
+      var(--k-gutter),
+      calc((100% - var(--k-max)) / 2 + var(--k-gutter))
+    );
+    padding-inline-start: var(--rail-indent);
+    padding-inline-end: 24px;
+    scroll-padding-inline-start: var(--rail-indent);
   }
 
   /* ---- Lift ---------------------------------------------------------
