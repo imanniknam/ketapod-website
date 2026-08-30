@@ -29,7 +29,7 @@ export function Hero() {
       {/* ── Backdrop ─────────────────────────────────────────────── */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-40 left-[-10%] size-[620px] rounded-full bg-[radial-gradient(circle,rgba(42,56,255,0.16)_0%,rgba(42,56,255,0.05)_45%,transparent_70%)]" />
-        <div className="absolute top-[18%] right-[-8%] size-[420px] rounded-full bg-[radial-gradient(circle,rgba(255,176,32,0.13)_0%,transparent_68%)]" />
+        <div className="absolute top-[18%] right-[-8%] size-[420px] rounded-full bg-[radial-gradient(circle,rgba(154,162,255,0.26)_0%,transparent_68%)]" />
         <div className="dotgrid absolute bottom-8 left-6 h-40 w-52 text-line-2/70 opacity-70 md:left-16" />
         <svg
           className="absolute -right-10 top-24 h-64 w-64 text-violet/10"

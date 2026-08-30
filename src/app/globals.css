@@ -2,16 +2,22 @@
 
 /* =========================================================================
    KETAPOD — Design Tokens
-   Concept: "کاغذ و موج" — warm paper, ink type, electric violet, wave motif.
+   Concept: "کاغذ و موج" — cool paper, ink type, electric blue, wave motif.
+
+   Everything on this page sits on the logo's hue (~234°). The accent always
+   did; the surfaces did not, and a warm paper under a cool blue is what made
+   the page look like two palettes stacked on each other.
    ========================================================================= */
 
 @theme {
   /* — Surface —————————————————————————————————
-     Warm, but at less than half the old saturation: enough to keep the paper
-     feeling like paper, too little to argue with the blue. */
-  --color-paper: #f9f9f7;
-  --color-paper-2: #f1f1ef;
-  --color-paper-3: #e7e7e4;
+     Cooled onto the brand hue. The lightness of each step is unchanged, so
+     every contrast ratio on the page is exactly what it was — only the
+     temperature moved. Cards stay pure white: against cool paper they read as
+     lifted, which is the job they were doing on warm paper too. */
+  --color-paper: #f7f8fc;
+  --color-paper-2: #eff0f6;
+  --color-paper-3: #e4e6ef;
   --color-card: #ffffff;
 
   /* — Ink ————————————————————————————————————
@@ -24,8 +30,8 @@
   --color-faint: #9596aa;
 
   /* — Line ——————————————————————————————————— */
-  --color-line: #e4e3e0;
-  --color-line-2: #d4d3cf;
+  --color-line: #e3e5ef;
+  --color-line-2: #d0d4e3;
 
   /* — Brand ——————————————————————————————————
      Blues from the logo sheet: #2A38FF / #6E78FF / #9AA2FF. The token names

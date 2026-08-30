@@ -9,12 +9,12 @@ type Tone = "violet" | "mint" | "night";
 
 const TONES: Record<Tone, { wash: string; ink: string; ring: string }> = {
   violet: {
-    wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#efe9ff_0%,#f8f5ff_55%,#faf8f4_100%)]",
+    wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#efe9ff_0%,#f8f5ff_55%,#f7f8fc_100%)]",
     ink: "text-violet-700",
     ring: "ring-violet-200/70",
   },
   mint: {
-    wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#ddf1e8_0%,#f1f9f5_55%,#faf8f4_100%)]",
+    wash: "bg-[radial-gradient(120%_90%_at_70%_20%,#ddf1e8_0%,#f1f9f5_55%,#f7f8fc_100%)]",
     ink: "text-mint-ink",
     ring: "ring-mint-100",
   },

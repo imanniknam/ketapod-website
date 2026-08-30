@@ -43,7 +43,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#f9f9f7",
+  /* Tracks `--color-paper`. Left behind, the browser chrome frames the page in
+     the old warm paper on mobile. */
+  themeColor: "#f7f8fc",
 };
 
 export default function RootLayout({

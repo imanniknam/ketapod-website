@@ -21,13 +21,17 @@ export function PageBackdrop() {
       className="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       style={{ contain: "strict" }}
     >
-      {/* Base: warm at the top, a touch cooler through the middle, warm again. */}
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#FBFAF7_0%,#F3F3F1_34%,#EFF0F6_58%,#F6F6F2_80%,#F9F8F5_100%)]" />
+      {/*
+        Base. A slow vertical shift through the logo's own range rather than the
+        old warm-cool-warm swing — that swing was the largest warm surface on
+        the page and the main reason the paper argued with the blue.
+      */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,#FAFBFE_0%,#F0F2F9_34%,#EDEFF8_58%,#F3F5FC_80%,#F8F9FE_100%)]" />
 
-      {/* Wide colour washes. Sized well beyond the viewport so the edges never
-          resolve into a visible circle. */}
+      {/* Wide colour washes, one per end of the logo's gradient. Sized well
+          beyond the viewport so the edges never resolve into a visible circle. */}
       <div className="absolute -top-[30vh] right-[-25vw] h-[95vh] w-[95vw] rounded-full bg-[radial-gradient(ellipse_closest-side_at_center,rgba(42,56,255,0.24)_0%,rgba(42,56,255,0.10)_38%,transparent_68%)]" />
-      <div className="absolute bottom-[-25vh] left-[-30vw] h-[85vh] w-[85vw] rounded-full bg-[radial-gradient(ellipse_closest-side_at_center,rgba(255,176,32,0.18)_0%,rgba(255,176,32,0.07)_40%,transparent_70%)]" />
+      <div className="absolute bottom-[-25vh] left-[-30vw] h-[85vh] w-[85vw] rounded-full bg-[radial-gradient(ellipse_closest-side_at_center,rgba(154,162,255,0.30)_0%,rgba(110,120,255,0.10)_40%,transparent_70%)]" />
 
       {/* Structure: a faint column grid, fading out before it becomes graph paper. */}
       <div className="absolute inset-0 hidden text-line-2/60 lg:block">

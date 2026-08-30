@@ -74,15 +74,20 @@ export function Header() {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex shrink-0 cursor-pointer items-center rounded-full py-1.5 pr-1"
+            className="flex shrink-0 cursor-pointer items-center rounded-full py-1 pr-1"
             aria-label="کتاپاد — رفتن به بالای صفحه"
           >
             {/*
               Mark only up here. Without the wordmark beside it the icon has to
               hold the brand by itself, so it is set well above the 34px lockup
               size — at the old size it read as a stray glyph next to the nav.
+
+              The vertical padding comes down as the mark goes up, because the
+              brand is the tallest thing in the bar and therefore sets the pill's
+              height: at `py-1.5` a 58px mark would have made the whole header
+              8px taller rather than 2px.
             */}
-            <BrandIcon className="size-12 sm:size-[52px]" />
+            <BrandIcon className="size-[52px] sm:size-[58px]" />
           </button>
 
           {/* Desktop nav */}
