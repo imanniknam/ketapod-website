@@ -23,6 +23,7 @@ export function Features() {
       <Aura mark="arc" className="right-[-10%] top-16 hidden md:block" size="size-[380px]" />
 
       <SectionHeading
+        split
         index="03"
         eyebrow="Features"
         title="چه چیزی داخل کتاپاد است؟"

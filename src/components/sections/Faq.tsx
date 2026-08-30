@@ -55,6 +55,7 @@ export function Faq() {
       </Float>
 
       <SectionHeading
+        split
         index="08"
         eyebrow="FAQ"
         title="سوالات متداول"

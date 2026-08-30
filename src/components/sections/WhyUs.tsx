@@ -18,6 +18,7 @@ export function WhyUs() {
       <Aura mark="orbit" className="-top-24 left-[-12%] hidden md:block" size="size-[460px]" />
 
       <SectionHeading
+        split
         index="01"
         eyebrow="Why Ketapod"
         title="چرا کتاپاد؟"

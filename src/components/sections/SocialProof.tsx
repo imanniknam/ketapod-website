@@ -54,6 +54,7 @@ export function SocialProof() {
       <Aura mark="arc" className="right-[-12%] top-24 hidden md:block" size="size-[400px]" />
       <div className="container-k">
         <SectionHeading
+          split
           index="07"
           eyebrow="Social Proof"
           title="آنچه کاربران می‌گویند"
