@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import { PageBackdrop } from "@/components/primitives/PageBackdrop";
 import { PageView } from "@/components/primitives/PageView";
-import { ScrollProgress } from "@/components/primitives/ScrollProgress";
 import { Faq } from "@/components/sections/Faq";
 import { Features } from "@/components/sections/Features";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -42,7 +41,6 @@ export default function HomePage() {
   return (
     <>
       <PageBackdrop />
-      <ScrollProgress />
       <PageView />
       <Header />
       <main>
