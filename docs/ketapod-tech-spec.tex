@@ -1,0 +1,837 @@
+%=========================================================================
+%  کتاپاد — سند فنی تفکیک قابلیت‌ها بین وب و موبایل
+%  کامپایل:  tectonic -X compile ketapod-tech-spec.tex
+%  یا:       xelatex ketapod-tech-spec.tex   (دو بار اجرا شود)
+%  پیش‌نیاز:  فونت Vazirmatn نصب شده باشد  (github.com/rastikerdar/vazirmatn)
+%=========================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=2.1cm,top=2.4cm,bottom=2.4cm]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyvrb}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[nointegrals]{wasysym}
+\usepackage{hyperref}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+
+\setmainlanguage{persian}
+\setotherlanguage{english}
+
+% هر خانواده فونتی که فارسی می‌گیرد باید Script=Arabic داشته باشد،
+% وگرنه شکل‌دهی حروف و ترتیب راست‌به‌چپ اعمال نمی‌شود.
+\setmainfont{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\vzheavy{Vazirmatn}[UprightFont=Vazirmatn-ExtraBold,Script=Arabic,Language=Persian]
+\newfontfamily\arabicfont{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\persianfont{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\arabicfonttt{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\arabicfontsf{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\persianfonttt{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\persianfontsf{Vazirmatn}[UprightFont=Vazirmatn-Regular,BoldFont=Vazirmatn-Bold,Script=Arabic,Language=Persian]
+\newfontfamily\latinfont{Helvetica Neue}[Scale=0.93]
+\newfontfamily\codefont{Menlo}[Scale=0.82]
+\setmonofont{Menlo}[Scale=0.82]
+
+\definecolor{web}{HTML}{3B4FA8}
+\definecolor{mob}{HTML}{0E7A5F}
+\definecolor{kid}{HTML}{A96A08}
+\definecolor{sys}{HTML}{0F6B72}
+\definecolor{warn}{HTML}{9A2B22}
+\definecolor{ink}{HTML}{15181B}
+\definecolor{soft}{HTML}{5B646B}
+\definecolor{rule}{HTML}{C6CBD0}
+\definecolor{zebra}{HTML}{F4F5F7}
+
+\hypersetup{colorlinks=true,linkcolor=sys,urlcolor=web,
+  pdftitle={کتاپاد — سند فنی تفکیک وب و موبایل},bookmarksnumbered=true}
+
+% از \LRE خود bidi استفاده می‌شود، نه \textenglish — تداخل با polyglossia ندارد.
+\newcommand{\lt}[1]{{\latinfont\LRE{#1}}}
+\newcommand{\cd}[1]{{\codefont\LRE{#1}}}
+\newcommand{\full}{\textcolor{sys}{\CIRCLE}}
+\newcommand{\half}{\textcolor{soft}{\LEFTcircle}}
+\newcommand{\none}{\textcolor{rule}{\Circle}}
+\newcommand{\tagbox}[2]{{\small\textcolor{#1}{\textbf{#2}}}}
+\newcommand{\tseo}{\tagbox{sys}{[SEO]}}
+\newcommand{\ttrap}{\tagbox{warn}{[تله]}}
+\newcommand{\tweb}{\tagbox{web}{وب}}
+\newcommand{\tmob}{\tagbox{mob}{موبایل}}
+\newcommand{\tkid}{\tagbox{kid}{کودک}}
+
+\newtcolorbox{notebox}[1]{colback=sys!6,colframe=sys,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\small,title=#1,breakable}
+\newtcolorbox{warnbox}[1]{colback=warn!6,colframe=warn,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\small,title=#1,breakable}
+\newtcolorbox{kidbox}[1]{colback=kid!7,colframe=kid,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\small,title=#1,breakable}
+\newtcolorbox{mobbox}[1]{colback=mob!6,colframe=mob,boxrule=0.7pt,arc=2pt,
+  left=8pt,right=8pt,top=6pt,bottom=6pt,fonttitle=\bfseries\small,title=#1,breakable}
+
+\titleformat{\section}{\vzheavy\Large\color{ink}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\bfseries\large\color{ink}}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{14pt}{6pt}
+
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\setlist[itemize]{leftmargin=1.3em,itemsep=2pt,topsep=3pt}
+\setlist[enumerate]{leftmargin=1.5em,itemsep=2pt,topsep=3pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{soft}{کتاپاد — سند فنی سطوح محصول}}
+\fancyhead[R]{\small\textcolor{soft}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\newcolumntype{N}[1]{>{\raggedright\arraybackslash\small}p{#1}}
+\newcolumntype{F}[1]{>{\raggedright\arraybackslash\bfseries}p{#1}}
+\newcommand{\feathead}{%
+\toprule
+\textbf{قابلیت} & \textcolor{web}{\textbf{وب}} & \textcolor{mob}{\textbf{موبایل}} & \textcolor{kid}{\textbf{کودک}} & \textbf{یادداشت پیاده‌سازی} \\
+\midrule
+}
+
+\begin{document}
+\sloppy
+
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2.2cm}
+{\small\textcolor{sys}{\textbf{سند فنی سطوح محصول \quad$\cdot$\quad نسخه ۱}}}\\[1.6cm]
+{\vzheavy\fontsize{27}{34}\selectfont کتاپاد}\\[0.5cm]
+{\vzheavy\fontsize{19}{26}\selectfont تفکیک کامل قابلیت‌ها بین وب و موبایل}\\[1.1cm]
+\rule{9cm}{0.5pt}\\[1.0cm]
+\begin{minipage}{13.5cm}
+\centering\normalsize\color{soft}
+تخصیص تمام قابلیت‌های پیچ‌دک، سند طراحی و یادداشت‌های جلسات میان وب، اپ موبایل و اپ کودک ---
+بدون حذف هیچ فیچری --- به‌همراه معماری سوپر‌اپ، استک فنی کامل با \lt{Go} در هسته،
+مدل داده، خط لوله رسانه و ترتیب اجرای پیشنهادی.
+\end{minipage}\\[2.4cm]
+\begin{minipage}{11cm}\small\color{soft}
+\begin{tabular}{@{}>{\bfseries}p{2.1cm}p{8.4cm}@{}}
+مخاطب: & تیم فنی و توسعه‌دهنده فول‌استک \\[3pt]
+ورودی‌ها: & پیچ‌دک نسخه ۱۶ (اسلایدهای ۹ تا ۲۳)، سند \lt{design-web-v1.1}، یادداشت‌های دست‌نویس جلسات، و گفتگوی فنی «تحلیل فنی استارتاپ» \\[3pt]
+وضعیت: & پیش از شروع کدنویسی \\[3pt]
+تاریخ: & شهریور ۱۴۰۵
+\end{tabular}
+\end{minipage}
+\end{center}
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{قاعده تفکیک}
+هر ردیف در ماتریس تخصیص از پنج قاعده زیر بیرون آمده است. وقتی قابلیت جدیدی به محصول اضافه شد،
+با همین قواعد جای آن را تعیین کنید تا تصمیم‌ها در طول زمان سازگار بمانند.
+\begin{enumerate}
+\item \textbf{می‌خواند، می‌سنجد، می‌خرد $\rightarrow$ وب.} صفحه بزرگ، صفحه‌کلید، اعتماد پرداخت، و مهم‌تر از همه ایندکس‌شدن در موتور جستجو.
+\item \textbf{مصرف می‌کند، عادت روزانه است، در حرکت است $\rightarrow$ موبایل.} پخش پس‌زمینه، قفل صفحه، هدفون، بلوتوث خودرو، آفلاین، نوتیفیکیشن.
+\item \textbf{فایل آپلود می‌کند یا ویرایش سنگین دارد $\rightarrow$ وب.} استودیو، پورتال ناشر، پنل سازمانی، پنل ادمین.
+\item \textbf{به میکروفن، حسگر یا سخت‌افزار دستگاه نیاز دارد $\rightarrow$ موبایل.} ضبط صدا، تعامل صوتی، جستجوی صوتی، دستیار صوتی.
+\item \textbf{کودک مصرف‌کننده است ولی والد تصمیم‌گیرنده $\rightarrow$ دو سطح.} کنترل و خرید در وب، مصرف در موبایل.
+\end{enumerate}
+
+\begin{notebox}{قاعده‌ای که کل معماری فرانت را تعیین می‌کند}
+هیچ قابلیتی در سطح \lt{API} «فقط وب» یا «فقط موبایل» نیست. بک‌اند همه‌چیز را به هر سه سطح ارائه می‌دهد
+و تفکیک تنها در لایه \textbf{رابط کاربری و اولویت تجربه} اعمال می‌شود. اگر این قاعده رعایت نشود،
+با هر تغییر تصمیم محصولی باید بک‌اند بازنویسی شود.
+\end{notebox}
+
+\subsection{راهنمای نمادها}
+\begin{center}
+\begin{tabular}{@{}c N{13.2cm}@{}}
+\toprule
+\full & \textbf{کامل} --- تجربه اصلی و مرجع در این سطح پیاده‌سازی می‌شود. \\
+\half & \textbf{محدود} --- نسخه ساده‌شده، فقط‌خواندنی، یا صرفاً نقطه ورود به سطح اصلی. \\
+\none & \textbf{ندارد} --- عمداً در این سطح ساخته نمی‌شود. \\
+\midrule
+\tseo & باید \lt{SSR} یا \lt{SSG} باشد و برای موتور جستجو ایندکس‌پذیر بماند. \\
+\ttrap & نقطه‌ای که اشتباه رایج دارد --- یادداشت آن ردیف را حتماً بخوانید. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{نقشه سطوح محصول}
+\label{sec:surfaces}
+محصول روی \textbf{نه سطح} ارائه می‌شود، اما این نه سطح تنها \textbf{چهار کدبیس} هستند.
+تفکیک نقش‌ها با مسیر و مجوز انجام می‌شود، نه با ساختن پروژه جدید.
+
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.1cm} N{3.0cm} N{9.4cm}@{}}
+\toprule
+\textbf{سطح} & \textbf{کدبیس} & \textbf{دامنه مسئولیت} \\
+\midrule
+\endhead
+وب عمومی & \lt{Next.js} & لندینگ، کاتالوگ، صفحه کتاب، نویسنده، دسته، بلاگ، صفحه گویش‌ها، صفحه کودک، صفحه \cd{/ai}. بدون نیاز به ورود و کاملاً ایندکس‌پذیر. \\
+وب‌اپ کاربر & \lt{Next.js} & کتابخانه، پخش‌کننده وب، یادداشت، کیف پول، اشتراک، پروفایل، داشبورد یادگیری، آپلود \lt{PDF}، برنامه مطالعاتی. \\
+پنل والد & \lt{Next.js} & پروفایل کودک، سقف زمان، تأیید محتوا، گزارش هفتگی، خرید برای کودک. بخشی از وب‌اپ است نه اپ جدا. \\
+استودیو سازنده & \lt{Refine} & آپلود و ویرایش صوت، ترنسکریپت، کاور، ارسال نمونه صدا، صف انتشار، گزارش درآمد گوینده. \\
+پورتال ناشر & \lt{Refine} & آثار، قرارداد حقوق، سفارش تولید صوت، فروش، تسویه، آنالیتیکس. \\
+پنل سازمانی & \lt{Refine} & مدرسه، دانشگاه و آموزشگاه؛ مدیریت صندلی، دعوت اعضا، گزارش سازمانی. \\
+پنل ادمین & \lt{Refine} & کاربران، محتوا، صف کارهای هوش مصنوعی، پرداخت‌ها، مدریشن، گزارش تخلف. \\
+اپ بزرگسال & \lt{Flutter} & پخش‌کننده کامل، آفلاین، کتاب‌یار، کتابخانه، گیمیفیکیشن، جامعه، ضبط، نوتیفیکیشن. \\
+اپ کودک & \lt{Flutter} & ناوبری کاملاً متفاوت، بدون متن سنگین، بدون جامعه، قفل \lt{PIN}، قصه شب، آفلاین خودرو. \\
+\midrule
+هسته پلتفرم & \lt{Go} & یک \lt{API} که همه نه سطح بالا را تغذیه می‌کند. هیچ منطق کسب‌وکاری در فرانت تکرار نمی‌شود. \\
+\bottomrule
+\end{longtable}
+
+\section{ماتریس تخصیص قابلیت‌ها}
+تمام قابلیت‌هایی که در پیچ‌دک، سند طراحی، یادداشت‌های جلسات یا گفتگوی فنی آمده‌اند، در نه دامنه
+دسته‌بندی و تخصیص یافته‌اند. \textbf{هیچ قابلیتی حذف نشده است}؛ ترتیب اجرای آن‌ها در بخش
+\ref{sec:order} آمده است.
+
+\subsection{کشف و کاتالوگ}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+صفحه اختصاصی هر کتاب & \full & \half & \half & \tseo\ مسیر \cd{/book/[slug]} با \lt{schema.org/Audiobook}. اپ فقط \lt{deep-link} به همان \lt{slug}؛ مرجع داده یکی است. \\
+جستجوی معمولی (عنوان، نویسنده، دسته) & \full & \full & \half & در نسخه کودک محدود به کاتالوگ تأییدشده و بدون ورودی متن آزاد برای سنین پایین. \\
+جستجوی معنایی و زبان طبیعی & \full & \full & \none & در وب صفحه مستقل \cd{/ai} ساخته شود؛ هم ابزار است هم صفحه فرود جذب لید. \\
+جستجوی صوتی & \half & \full & \full & میکروفن $\rightarrow$ موبایل. در نسخه کودک \textbf{مهم‌ترین} ورودی است، چون کودکی که خواندن بلد نیست تایپ نمی‌کند. \\
+پیشنهاد هوشمند بر اساس علایق & \half & \full & \full & سیگنال رفتاری از موبایل می‌آید، پس تجربه اصلی هم آنجاست. وب نسخه ساده‌تر نمایش دهد. \\
+پیشنهاد بر اساس تیپ شخصیتی & \full & \half & \none & آزمون شخصیت فرم بلند است $\rightarrow$ وب. نتیجه در هر دو سطح مصرف می‌شود. \\
+پیش‌نمایش رایگان & \full & \full & \full & \ttrap\ در وب کلیپ زیر ۶۰ ثانیه با \cd{preload="none"}. سه فایل صوتی روی لندینگ، \lt{LCP} را روی شبکه موبایل ایران نابود می‌کند. \\
+دسته، نویسنده، ناشر، مجموعه & \full & \full & \half & \tseo\ هرکدام \lt{URL} مستقل. ارزان‌ترین صفحات ایندکس‌پذیر پروژه. \\
+محتوای انحصاری صوتی & \half & \full & \full & در وب فقط صفحه معرفی و خرید؛ پخش کامل در اپ تا انگیزه نصب ایجاد شود. \\
+پادکست و محتوای جانبی & \full & \full & \half & \tseo\ صفحه هر اپیزود همراه ترنسکریپت متنی $=$ محتوای ایندکس‌پذیر رایگان. \\
+محتوای چندزبانه و بین‌المللی & \full & \full & \full & \tseo\ مسیر مستقل هر زبان با \cd{hreflang}. برای ایرانیان خارج از کشور وب کانال اصلی است نه اپ. \\
+گویش‌ها و زبان‌های قومی & \full & \full & \full & \tseo\ برای هر گویش یک صفحه فرود؛ هم ترافیک ارگانیک است هم ماده خام روابط عمومی. \\
+محتوای تخصصی مدیریت و کارآفرینی & \full & \full & \none & مجموعه‌های موضوعی در وب برای \lt{SEO}، مصرف در موبایل. \\
+\bottomrule
+\end{longtable}
+
+\subsection{پخش، کتابخانه و همگام‌سازی}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+پخش‌کننده صوتی & \half & \full & \full & وب پخش‌کننده کامل دارد ولی تجربه مرجع موبایل است. در وب \cd{hls.js} به‌همراه \lt{MediaSession API}. \\
+پخش پس‌زمینه، قفل صفحه، بلوتوث، خودرو & \none & \full & \full & تنها جایی که اپ واقعاً غیرقابل جایگزین است. \cd{audio\_service} به‌علاوه \lt{Android Auto} و \lt{CarPlay}. \\
+دانلود و پخش آفلاین & \none & \full & \full & \ttrap\ دانلود آفلاین \lt{HLS} رمزنگاری‌شده در \lt{Flutter} راه‌حل بالغی ندارد. برای دانلود از فایل تک‌تکه \lt{m4a} با \lt{Range} استفاده شود و \lt{HLS} فقط برای استریم بماند. \\
+تنظیم سرعت پخش & \full & \full & \half & در نسخه کودک بازه محدودتر و بدون سرعت‌های بالا. \\
+تایمر حالت خواب & \half & \full & \full & در نسخه کودک یکی از پرکاربردترین قابلیت‌هاست (قصه شب) و باید جای برجسته داشته باشد. \\
+نشانه‌گذاری \lt{Bookmark} & \full & \full & \none & همگام میان دستگاه‌ها؛ کلید یکتا: کاربر $\times$ نسخه صوتی $\times$ زمان. \\
+\lt{Bookmark} هوشمند با خلاصه & \full & \full & \none & خلاصه در پس‌زمینه توسط \lt{worker} ساخته شود، نه هم‌زمان با کلیک کاربر. \\
+یادداشت‌برداری & \full & \half & \none & نوشتن بلند $\rightarrow$ وب. در موبایل فقط یادداشت کوتاه و یادداشت صوتی حین شنیدن. \\
+هایلایت و جملات برتر & \full & \full & \none & شمارش هایلایت‌ها ورودی «جملات پرنشان» برای تولید طرح گرافیکی است. \\
+کلیپ صوتی (برش یک بخش) & \half & \full & \none & حین شنیدن رخ می‌دهد $\rightarrow$ موبایل. برش سمت سرور انجام شود نه روی دستگاه. \\
+همگام‌سازی موقعیت بین دستگاه & \full & \full & \full & الزامی در همه سطوح. نوشتن با \lt{debounce} هر ۱۰ ثانیه و در \lt{pause}؛ حل تعارض با \lt{last-write-wins} بر پایه زمان دستگاه. \\
+ادامه شنیدن & \full & \full & \full & در نسخه کودک باید بزرگ‌ترین عنصر صفحه اول باشد. \\
+\lt{Smart Recap} پس از غیبت & \half & \full & \none & با \lt{push} ترکیب شود: «دو هفته است برنگشتی، این خلاصه فصل‌های قبل است». \\
+همگام‌سازی متن و صوت & \full & \full & \half & وب برای خواندن، موبایل برای شنیدن. در نسخه کودک به شکل روشن‌شدن کلمه در حال خوانده‌شدن --- ابزار سوادآموزی. \\
+کتابخانه شخصی و لیست علاقه‌مندی & \full & \full & \full & در نسخه کودک به شکل «قفسه من» با کاورهای بزرگ. \\
+\bottomrule
+\end{longtable}
+
+\subsection{کتاب‌یار}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+چت درباره محتوای کتاب & \full & \full & \half & در نسخه کودک فقط پرسش‌های از پیش تعریف‌شده، نه ورودی آزاد. این یک تصمیم ایمنی است نه محصولی. \\
+خلاصه کتاب و خلاصه فصل & \full & \full & \none & \tseo\ خلاصه در صفحه عمومی کتاب نیز منتشر شود --- محتوای ایندکس‌پذیر رایگان. \\
+معرفی موضوعات اصلی و تحلیل محتوا & \full & \half & \none & خروجی بلند و ساختاریافته روی صفحه بزرگ بهتر خوانده می‌شود. \\
+آگاهی از موقعیت جاری کاربر & \full & \full & \none & هسته ارزش این قابلیت. در هر درخواست باید \cd{bookId + chapterId + currentTime} ارسال شود. \\
+تعامل صوتی (پرسیدن با صدا) & \half & \full & \full & در نسخه کودک ورودی اصلی است. هدفون وصل و دست مشغول $\rightarrow$ موبایل. \\
+کوییز و آزمون از محتوا & \half & \full & \full & عادت روزانه $\rightarrow$ موبایل. در نسخه کودک شکل بازی بگیرد نه آزمون. \\
+بحث و گفتگو حول موضوعات کتاب & \full & \full & \none & \tseo\ رشته‌های گفتگو محتوای تولیدشده کاربر و ایندکس‌پذیرند. \\
+صفحه عمومی کتاب‌یار برای جذب & \full & \none & \none & \cd{/ai} --- بدون نیاز به ورود، چند پرسش رایگان، سپس فرم لید. قیف اصلی جذب. \\
+\bottomrule
+\end{longtable}
+
+\subsection{تولید محتوا و مشارکت کاربر}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+آپلود \lt{PDF} و تبدیل به صوت & \full & \half & \none & آپلود فایل بزرگ $\rightarrow$ وب. در موبایل فقط از طریق \lt{share sheet} و فایل‌منیجر. آپلود \lt{chunked} با قابلیت \lt{resume}. \\
+انتخاب صدای دلخواه برای \lt{PDF} & \full & \full & \none & وضعیت پردازش با \lt{SSE} یا \lt{polling} نمایش داده شود، نه \lt{WebSocket}. \\
+آپلود صوت گویندگی کاربر & \full & \half & \none & فایل‌های صوتی بلند و ویرایش $\rightarrow$ وب. موبایل فقط ضبط و ارسال خام. \\
+ضبط پادکست شخصی & \half & \full & \none & ضبط با میکروفن $\rightarrow$ موبایل؛ ویرایش، برش و انتشار $\rightarrow$ استودیو وب. این دو باید به هم متصل باشند: ضبط در موبایل، پیش‌نویس در استودیو. \\
+ارسال نمونه صدا برای مدل شخصی & \half & \full & \none & ضبط راهنمادار جمله‌به‌جمله $\rightarrow$ موبایل؛ مدیریت و تأیید مدل $\rightarrow$ وب. \\
+استودیو کامل سازنده & \full & \half & \none & ویرایش موج صوتی، ترنسکریپت، کاور، متادیتا، صف انتشار. در اپ به‌صورت \lt{WebView} --- بخش \ref{sec:superapp}. \\
+بازارگاه صدا و تقسیم درآمد & \full & \half & \none & انتخاب صدا هنگام پخش در هر دو؛ ثبت‌نام گوینده، قرارداد و تسویه فقط در وب. \\
+صفحه اختصاصی هر گوینده & \full & \half & \half & \tseo\ مسیر \cd{/voice/[slug]} --- نام گوینده مشهور کوئری جستجوی پرحجمی است. \\
+\bottomrule
+\end{longtable}
+
+\subsection{اجتماعی و جامعه}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+نظر و امتیازدهی & \full & \full & \none & \tseo\ با \lt{schema.org/Review}. نمایش ستاره در نتایج جستجو نرخ کلیک را بالا می‌برد. \\
+پرسش و پاسخ بین کاربران & \full & \full & \none & نوشتن بلند در وب راحت‌تر، اما اعلان و پاسخ سریع در موبایل. \\
+جامعه اقوام و گویش‌ها & \full & \full & \none & هر گویش یک فضای مستقل با فید و چالش مخصوص خود. \\
+مسابقات، چالش‌ها و همایش‌ها & \full & \full & \half & ثبت‌نام، قوانین و نتایج $\rightarrow$ وب؛ شرکت روزانه و ارسال $\rightarrow$ موبایل. در نسخه کودک فقط چالش انفرادی بدون رقابت با غریبه. \\
+چالش صوتی شبکه‌های اجتماعی & \full & \full & \none & صفحه کمپین قابل اشتراک $\rightarrow$ وب؛ ضبط و خروجی برای اینستاگرام $\rightarrow$ موبایل. \\
+پخش زنده و مکالمه چندمحوره & \half & \full & \none & صوت زنده روی موبایل، وب فقط شنونده. با \lt{LiveKit} یا \lt{Centrifugo} ساخته شود، نه از صفر. \\
+تحلیل احساسات نظرات & \full & \none & \none & ابزار داخلی است نه کاربری؛ در پنل ادمین قرار می‌گیرد. \\
+\bottomrule
+\end{longtable}
+
+\subsection{گیمیفیکیشن، رشد و نگهداشت}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+\lt{Streak} و دستاوردها & \half & \full & \full & عادت روزانه $\rightarrow$ موبایل. در نسخه کودک شکل استیکر و مدال بگیرد نه عدد. \\
+نشان «کتابخوان اعظم» و سطوح & \full & \full & \half & قواعد سطح‌بندی در بک‌اند نگهداری شود نه در فرانت، وگرنه وب و موبایل واگرا می‌شوند. \\
+جدول رتبه‌بندی & \full & \full & \none & \ttrap\ در نسخه کودک رتبه‌بندی با غریبه‌ها قرار داده نشود؛ در صورت نیاز فقط بین اعضای خانواده. \\
+آمار ساعات مطالعه و داشبورد یادگیری & \full & \half & \none & نمودار کامل $\rightarrow$ وب؛ موبایل فقط خلاصه هفتگی. \\
+تخفیف به ازای مطالعه بیشتر & \full & \full & \none & محاسبه در بک‌اند، اعمال هنگام پرداخت. \\
+برنامه مطالعاتی و چک‌لیست & \full & \full & \half & ساخت و تنظیم برنامه $\rightarrow$ وب؛ اجرا و تیک روزانه $\rightarrow$ موبایل. \\
+آنالیز ساعات مفید مطالعه & \full & \half & \none & داده از موبایل جمع می‌شود، گزارش در وب خوانده می‌شود. \\
+نوتیفیکیشن و یادآوری & \half & \full & \full & \ttrap\ نوتیفیکیشن کودک باید به \textbf{گوشی والد} برود نه دستگاه کودک. \\
+دعوت دوستان و بن تخفیف & \full & \full & \none & لینک دعوت باید صفحه وب باز کند نه اپ، تا کاربر بدون نصب هم بتواند ثبت‌نام کند. \\
+طرح گرافیکی از جملات برتر & \full & \full & \none & تولید تصویر سمت سرور؛ دانلود با کیفیت چاپ فقط در وب. \\
+\bottomrule
+\end{longtable}
+
+\subsection{تجارت، پرداخت و اشتراک}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+خرید کتاب & \full & \half & \none & \ttrap\ فروش کالای دیجیتال داخل اپ در کافه‌بازار قوانین و کمیسیون خود را دارد. پیش از طراحی جریان پرداخت، سیاست روز بازار بررسی شود. \\
+کیف پول و شارژ اعتبار & \full & \half & \none & الگوی امن: شارژ در وب، خرج در همه سطوح. دفتر کل فقط‌افزودنی نوشته شود نه یک فیلد \cd{balance}. \\
+اشتراک ماهانه چندسطحی & \full & \half & \none & درگاه‌های ایرانی تمدید خودکار کامل ندارند؛ یادآوری تمدید با \lt{push} و پیامک ساخته شود. \\
+تمدید با اعتبار درون‌برنامه‌ای & \full & \full & \none & چون از کیف پول کسر می‌شود نه از درگاه، در اپ محدودیتی ندارد. \\
+ضمانت بازگشت وجه & \full & \half & \none & فرم درخواست $\rightarrow$ وب؛ وضعیت پیگیری $\rightarrow$ هر دو. \\
+کد تخفیف، کارت هدیه، بن & \full & \full & \none & هدیه کتاب به شخص دیگر --- جریان کاملاً وب‌محور با لینک دریافت. \\
+تبلیغات هدفمند & \full & \full & \none & \ttrap\ در نسخه کودک هیچ تبلیغی قرار داده نشود؛ خط قرمز اعتماد والدین است. \\
+پک فرهنگی و بسته مناسبتی & \full & \half & \none & پیکربندی بسته، پیام تبریک و زمان تحویل $\rightarrow$ وب. \\
+تایپوگرافی فیزیکی و کالای چاپی & \full & \half & \none & سبد خرید فیزیکی، آدرس و ارسال فقط در وب؛ جریانی کاملاً متفاوت از کالای دیجیتال. \\
+بسته‌های صوتی هدیه از صدای اشخاص & \full & \half & \none & سفارشی‌سازی متن و انتخاب صدا روی صفحه بزرگ. \\
+\bottomrule
+\end{longtable}
+
+\subsection{سازمانی، ناشر و آموزشی}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+پورتال ناشر & \full & \none & \none & آثار، قرارداد حقوق، سفارش تولید صوت، فروش، تسویه. \\
+پنل مدرسه، دانشگاه و آموزشگاه & \full & \none & \none & مدل صندلی؛ دعوت با کد سازمانی یا دامنه ایمیل. \\
+مصرف محتوای سازمانی توسط عضو & \full & \full & \full & دسترسی از \cd{Entitlement} می‌آید، پس در همه سطوح خودکار کار می‌کند. \\
+دسترسی رایگان مدارس و فرهنگسراها & \full & \full & \full & همان مدل صندلی با قیمت صفر و تاریخ انقضا. \\
+تولید محتوای تخصصی توسط آموزشگاه & \full & \none & \none & همان استودیو با نقش سازمانی. \\
+آنالیتیکس و گزارش سازمانی & \full & \none & \none & خروجی \lt{Excel} در نظر گرفته شود؛ سازمان‌های ایرانی این را می‌خواهند. \\
+پنل ادمین و مدریشن & \full & \none & \none & صف تأیید محتوای کاربر، صف کارهای هوش مصنوعی، مدیریت پرداخت، گزارش تخلف. \\
+کیوسک در مراکز فرهنگی & \half & \none & \none & همان وب‌اپ در حالت \lt{kiosk} با ورود موقت با کد؛ کدبیس پنجم ساخته نشود. \\
+\bottomrule
+\end{longtable}
+
+\subsection{دسترس‌پذیری}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.9cm} c c c N{7.2cm}@{}}
+\feathead
+\endhead
+صفحه‌خوان و ناوبری کیبورد & \full & \full & \full & وب: \lt{WCAG 2.2 AA} و \cd{aria-live} برای وضعیت پخش. موبایل: \lt{TalkBack} و \lt{VoiceOver} با ویجت \cd{Semantics}. \\
+مقیاس فونت و کنتراست بالا & \full & \full & \full & تا ۲۰۰٪ بزرگ‌نمایی بدون شکستن چیدمان؛ استفاده از \cd{rem} و \cd{MediaQuery.textScaler}. \\
+ترنسکریپت متنی همگام & \full & \full & \half & پرارزش‌ترین دارایی فنی پروژه --- توضیح در کادر زیر. \\
+کنترل تک‌دستی و اهداف لمسی بزرگ & \half & \full & \full & حداقل ۴۸ نقطه؛ در نسخه کودک بزرگ‌تر. \\
+کاهش حرکت و انیمیشن & \full & \full & \full & \cd{prefers-reduced-motion} و \cd{disableAnimations}. \\
+\bottomrule
+\end{longtable}
+
+\begin{notebox}{یک دارایی، چهار کاربرد}
+\textbf{ترنسکریپت همگام با زمان} را از روز اول تولید و ذخیره کنید. همان یک ساختار داده
+هم‌زمان چهار کار انجام می‌دهد:
+\textbf{(۱)} دسترس‌پذیری برای ناشنوایان و کم‌شنوایان؛
+\textbf{(۲)} هزاران صفحه متنی ایندکس‌پذیر که هیچ رقیب ایرانی ندارد؛
+\textbf{(۳)} همگام‌سازی متن و صوت و روشن‌شدن کلمه در حال خوانده‌شدن؛
+\textbf{(۴)} منبع \lt{context} برای کتاب‌یار بدون پردازش دوباره کتاب.
+اگر قرار است یک تصمیم فنی زودتر از بقیه گرفته شود، این است.
+\end{notebox}
+
+\section{کودک: دو کاربر، دو سطح، یک حساب}
+در حوزه کودک، \textbf{کسی که مصرف می‌کند پول نمی‌دهد و کسی که پول می‌دهد مصرف نمی‌کند}.
+کل معماری این بخش از همین یک جمله بیرون می‌آید.
+
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{4.4cm} N{1.6cm} N{2.6cm} N{7.0cm}@{}}
+\toprule
+\textbf{وظیفه} & \textbf{کاربر} & \textbf{سطح} & \textbf{دلیل} \\
+\midrule
+\endhead
+کشف محصول و تصمیم خرید & والد & \tweb & جستجوی «قصه صوتی کودک». صفحه فرود کودک باید مستقل و کاملاً \lt{SEO}-محور باشد. \\
+پرداخت و اشتراک & والد & \tweb & اعتماد پرداخت روی دسکتاپ بالاتر است و از پیچیدگی پرداخت درون‌برنامه‌ای اجتناب می‌شود. \\
+ساخت پروفایل کودک و تعیین سن & والد & \tweb\ \tmob & سن، فیلتر محتوا، زبان یا گویش. یک حساب، چند پروفایل کودک. \\
+سقف زمان استفاده روزانه & والد & \tweb\ \tmob & اعمال باید \textbf{سمت اپ} باشد تا آفلاین هم کار کند، ولی تنظیم و همگام‌سازی از سرور. \\
+تأیید یا رد محتوا & والد & \tweb & لیست سفید و سیاه؛ مرور کاتالوگ روی صفحه بزرگ. \\
+گزارش هفتگی «کودکم چه گوش داد» & والد & \tweb\ \tmob & نمودار کامل در وب، خلاصه و نوتیفیکیشن در موبایل والد. مهم‌ترین ابزار نگهداشت والد. \\
+انتخاب و پخش قصه & کودک & \tkid & کاور بزرگ، بدون متن سنگین، ورودی صوتی، بدون منوی تودرتو. \\
+قصه شب با تایمر خواب & کودک & \tkid & پرکاربردترین سناریو؛ باید در صفحه اول باشد نه پشت سه کلیک. \\
+پخش آفلاین در خودرو و سفر & کودک & \tkid & حیاتی. دانلود خودکار «قفسه من» روی وای‌فای، تنظیم‌شده توسط والد. \\
+دستاورد، استیکر و مدال & کودک & \tkid & بدون عدد، بدون رقابت با غریبه، بدون رتبه‌بندی عمومی. \\
+خروج از حالت کودک & والد & \tkid & قفل \lt{PIN} یا ضربه طولانی به‌همراه محاسبه ساده؛ کودک نباید بتواند خارج شود. \\
+\bottomrule
+\end{longtable}
+
+\begin{kidbox}{چهار قاعده‌ای که در نسخه کودک نباید شکسته شود}
+\textbf{(۱)} هیچ تبلیغی، در هیچ شکلی.
+\textbf{(۲)} هیچ ورودی متن آزاد به هوش مصنوعی --- فقط پرسش‌های از پیش تعریف‌شده.
+\textbf{(۳)} هیچ محتوای تولیدشده توسط کاربران غریبه در دسترس کودک نباشد؛ کاتالوگ کودک فقط تأییدشده.
+\textbf{(۴)} هیچ نوتیفیکیشنی به دستگاه کودک نرود --- همه به گوشی والد.\\[4pt]
+این چهار قاعده باید در بک‌اند به‌صورت \lt{policy} پیاده شوند نه به‌صورت شرط در فرانت.
+\end{kidbox}
+
+\begin{warnbox}{تصمیم معماری که باید همین حالا گرفته شود}
+پروفایل کودک \textbf{کاربر مستقل نیست، زیرمجموعه حساب والد است}؛ یعنی \cd{ChildProfile} با
+کلید خارجی \cd{parent\_user\_id}، نه رکوردی در جدول \cd{users}. اگر برعکس عمل شود،
+در هر نقطه‌ای از سیستم که مالکیت، پرداخت، دسترسی یا حریم خصوصی مطرح است باید استثنا نوشته شود.
+\end{warnbox}
+
+\section{هسته پلتفرم با \lt{Go}}
+انتخاب \lt{Go} برای این پلتفرم منطقی است و مسیر بر همان اساس بسته شده است. آنچه اهمیت دارد،
+انتخاب‌های درون اکوسیستم \lt{Go} است که برای یک پلتفرم صوتی تفاوت واقعی ایجاد می‌کنند.
+
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{2.9cm} N{3.7cm} N{9.0cm}@{}}
+\toprule
+\textbf{لایه} & \textbf{انتخاب} & \textbf{دلیل} \\
+\midrule
+\endhead
+روتر & \lt{chi/v5} & \textbf{نه \lt{Fiber}.} \lt{Fiber} روی \lt{fasthttp} سوار است و با \cd{net/http} سازگار نیست؛ یعنی میان‌افزارهای استاندارد، \lt{HTTP/2} و مهم‌تر از همه رفتار \cd{http.ServeContent} و \lt{Range request} از دست می‌رود. برای پلتفرمی که کارش سرو کردن صوت است این بدهی واقعی است. \\
+دیتابیس & \lt{PostgreSQL 16} & افزونه‌ها: \cd{pgvector} برای جستجوی برداری، \cd{pg\_trgm} برای جستجوی فازی فارسی، \cd{unaccent}. \\
+دسترسی داده & \lt{pgx/v5 + sqlc} & \lt{SQL} نوشته می‌شود و \lt{sqlc} کد نوع‌امن تولید می‌کند. بدون جادوی \lt{ORM} و بدون \lt{N+1} غافلگیرکننده. \\
+مهاجرت & \lt{goose} & تک باینری، \lt{SQL} خام، بدون وابستگی. \\
+صف کارها & \lt{asynq} & \textbf{نه \lt{RabbitMQ}، نه \lt{Kafka}.} روی \lt{Redis} کار می‌کند، بومی \lt{Go} است، \lt{retry} و زمان‌بندی و صف اولویت‌دار و داشبورد وب دارد. \\
+کش و نشست & \lt{Redis 7 + go-redis} & کش، \lt{rate limit}، قفل توزیع‌شده و صف --- یک سرویس، چهار کاربرد. \\
+احراز هویت & \lt{OTP + JWT} & ورود با پیامک، بدون رمز و بدون ایمیل. \lt{access token} کوتاه‌عمر و \lt{refresh token} مبهم در دیتابیس تا قابل ابطال باشد. جدول \cd{devices} برای سقف پخش هم‌زمان. \\
+قرارداد \lt{API} & \lt{OpenAPI 3.1} & با \lt{oapi-codegen} برای سرور. مهم‌ترین انتخاب کل جدول --- بخش \ref{sec:leverage}. \\
+جستجو & \lt{Postgres FTS} $\rightarrow$ \lt{Meilisearch} & تا ده هزار عنوان \lt{FTS} کافی است. سپس \lt{Meilisearch}: تک‌باینری، توکن‌سازی فارسی خوب، و \lt{typo tolerance} که برای املای فارسی حیاتی است. \\
+پردازش رسانه & \lt{ffmpeg} از \lt{worker} & ترنسکد، نرمال‌سازی بلندی با \cd{loudnorm} بر پایه \lt{EBU R128}، قطعه‌بندی \lt{HLS}، ساخت \lt{waveform}. \\
+بی‌درنگ & \lt{SSE} $\rightarrow$ \lt{coder/websocket} & برای وضعیت کار پردازش، \lt{SSE} کافی و ساده‌تر است. \lt{WebSocket} تنها هنگام رسیدن به پخش زنده. \\
+لاگ و خطا & \cd{log/slog} \lt{+ Sentry} & \lt{Sentry} یا \lt{GlitchTip} خودمیزبان. \\
+متریک & \lt{Prometheus + Grafana} & از روز اول متریک پخش صوت ثبت شود: نرخ شروع پخش، توقف میانی، مصرف پهنای باند. \\
+تست & \lt{testify + testcontainers} & تست یکپارچه با \lt{Postgres} و \lt{Redis} واقعی داخل کانتینر. \\
+\bottomrule
+\end{longtable}
+
+\subsection{ساختار مونولیت ماژولار}
+یک باینری \lt{API}، یک باینری \lt{worker}، یک باینری زمان‌بند --- با مرزهای ماژولی سفت.
+هر ماژول تنها از طریق واسط ماژول دیگر را صدا می‌زند و هرگز مستقیم به جدول ماژول دیگر دست نمی‌زند.
+
+\begin{english}
+\begin{Verbatim}[fontsize=\footnotesize,xleftmargin=4mm]
+cmd/
+  api/          HTTP server
+  worker/       asynq consumers - tts, pdf, embeddings, images, notify
+  scheduler/    cron - streaks, weekly reports, subscription reminders
+  migrate/
+
+internal/
+  platform/     db . redis . storage . sms . push . payment . aigw
+                media . telemetry . ratelimit
+
+  identity/     users . otp . sessions . devices . roles . orgs
+  catalog/      books . authors . publishers . categories . collections
+                editions . chapters . transcripts
+  media/        audio assets . transcode jobs . hls . signed urls . downloads
+  library/      positions . bookmarks . notes . highlights . clips . shelves
+  commerce/     wallet . ledger . orders . entitlements . subscriptions
+                coupons . refunds . payouts
+  discovery/    search . recommendations . feeds . personality profile
+  assistant/    ketabyar rag . summaries . quiz . study plans
+  studio/       uploads . voice submissions . review queue . publishing
+  kids/         child profiles . parental controls . screen time . policy
+  social/       reviews . discussions . challenges . contests . live rooms
+  growth/       streaks . badges . leaderboards . referrals . campaigns
+                notifications
+  b2b/          seats . school access . publisher portal . org analytics
+  analytics/    event ingest
+
+pkg/            reusable helpers, no business logic
+api/            openapi.yaml - single source of truth
+migrations/
+\end{Verbatim}
+\end{english}
+
+هر ماژول ساختار یکسانی دارد: \cd{handler.go} برای لایه \lt{HTTP}، \cd{service.go} برای منطق
+کسب‌وکار، \cd{repo.go} برای دسترسی داده، و \cd{model.go} برای انواع دامنه.
+
+\section{مدل داده}
+تنها بخشی از معماری که اگر روز اول اشتباه گرفته شود، اصلاح آن در ماه دوازدهم بسیار پرهزینه است.
+
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.4cm} N{5.4cm} N{6.8cm}@{}}
+\toprule
+\textbf{موجودیت} & \textbf{نکته کلیدی طراحی} & \textbf{چه چیزی را ممکن می‌کند} \\
+\midrule
+\endhead
+\cd{Book} & اثر انتزاعی: عنوان، نویسنده، ناشر، متن مرجع. \textbf{هیچ فایل صوتی اینجا نیست.} & جدا کردن «اثر» از «اجرا» --- پیش‌نیاز همه‌چیز. \\
+\cd{AudioEdition} & هر کتاب چند نسخه دارد: \cd{voice\_id}، گویش، \cd{narrator\_type} (انسانی یا هوش مصنوعی)، قیمت مستقل، \cd{is\_kids\_friendly}. & گویش‌ها، صدای کودک، نسخه انسانی و هوش مصنوعی کنار هم، بازارگاه صدا. \\
+\cd{Chapter} & مرزهای فصل با \lt{timestamp} شروع و پایان، ترتیب، عنوان. & پرش بین فصل، \lt{Smart Recap}، دامنه \lt{context} کتاب‌یار. \\
+\cd{Transcript} & نگاشت متن به زمان در سطح جمله یا کلمه، به ازای هر \cd{AudioEdition}. & دسترس‌پذیری، \lt{SEO}، همگام‌سازی متن و صوت، منبع \lt{RAG}. \\
+\cd{ListeningPosition} & به ازای کاربر و \cd{AudioEdition}، نه به ازای کتاب. & همگام‌سازی بین دستگاه بدون گم‌شدن موقعیت هنگام تعویض صدا. \\
+\cd{Entitlement} & حق دسترسی، \textbf{جدا از} تراکنش خرید؛ با منشأ خرید، هدیه، اشتراک یا سازمان، و تاریخ انقضا. & هدیه، کد تخفیف، دسترسی سازمانی و اشتراک --- بدون بازنویسی منطق پرداخت. \\
+\cd{WalletLedger} & دفتر دوطرفه فقط‌افزودنی؛ موجودی از جمع تراکنش‌ها محاسبه می‌شود نه از یک فیلد. & حسابرسی، بازگشت وجه، تقسیم درآمد با ناشر و گوینده. \\
+\cd{PronunciationLexicon} & واژه به تلفظ، با دامنه سراسری یا مخصوص یک کتاب. & دارایی انباشتی: هر کتاب کیفیت کتاب بعدی را بالا می‌برد. \\
+\cd{RightsGrant} & ناشر، محدوده، تاریخ انقضا، درصد تقسیم درآمد. & پاسخ به ناشر وقتی می‌پرسد «سوابق چیست». \\
+\cd{ChildProfile} & زیرمجموعه \cd{User} والد، با سن، فیلترها و سقف زمان. & کل دامنه کودک؛ بدون این، استثنا در همه‌جا. \\
+\cd{Device} & به ازای کاربر، با \cd{push\_token} و آخرین فعالیت. & سقف پخش هم‌زمان، ابطال نشست، هدف‌گیری نوتیفیکیشن. \\
+\bottomrule
+\end{longtable}
+
+\begin{notebox}{قرارداد شناسه صدا}
+سند طراحی صفحه \lt{Home} قرارداد \cd{voices[].id == sources[].voiceId} را تعریف کرده است.
+این قرارداد درست است و باید در کل سیستم حفظ شود تا فرانت هیچ‌گاه مجبور به نگاشت دستی بین
+صدای انتخابی کاربر و منبع صوتی واقعی نشود.
+\end{notebox}
+
+\section{خط لوله رسانه}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}c F{4.6cm} N{10.0cm}@{}}
+\toprule
+\textbf{گام} & \textbf{کار} & \textbf{جزئیات فنی} \\
+\midrule
+\endhead
+۱ & دریافت منبع & \lt{PDF}، \lt{EPUB} یا فایل صوتی خام. آپلود \lt{chunked} با \lt{resume} مستقیم به \lt{object storage} با \lt{presigned URL}. \\
+۲ & استخراج و پاک‌سازی متن & حذف سرصفحه، پاورقی و شماره صفحه. \lt{PDF} اسکن‌شده نیاز به \lt{OCR} فارسی دارد. \\
+۳ & نرمال‌سازی متن & یکسان‌سازی «ی» و «ک»، نیم‌فاصله، اعداد، تاریخ، اختصارات. \\
+۴ & واژه‌نامه تلفظ & اعمال \cd{PronunciationLexicon} برای اسامی خاص و اصطلاحات. \\
+۵ & قطعه‌بندی و تولید صوت & کار در صف \lt{asynq} با اولویت؛ خروجی قطعه‌قطعه تا در صورت شکست کل کتاب از نو تولید نشود. \\
+۶ & پس‌پردازش صوت & درج مکث، اتصال قطعات، نرمال‌سازی بلندی با \cd{ffmpeg loudnorm} بر پایه \lt{EBU R128}. \\
+۷ & تولید ترنسکریپت همگام & نگاشت متن به زمان، ذخیره در \cd{Transcript}. \\
+۸ & بازبینی انسانی & صف بازبینی در پنل ادمین؛ اصلاحات به واژه‌نامه بازخورد داده می‌شود. \\
+۹ & بسته‌بندی و انتشار & دو خروجی: \lt{HLS} با \lt{fMP4} برای استریم، و \lt{m4a} تک‌فایل برای دانلود آفلاین. هر دو \textbf{۴۸ کیلوبیت مونو}. \\
+۱۰ & توزیع & \lt{object storage} ایرانی با \lt{CDN}؛ \lt{URL} امضاشده با عمر کوتاه و پشتیبانی \lt{HTTP Range}. \\
+\bottomrule
+\end{longtable}
+
+\begin{mobbox}{تصمیم فنی که تصمیم مالی است}
+برای گفتار، \textbf{۴۸ کیلوبیت مونو} از ۱۲۸ کیلوبیت استریو عملاً قابل تشخیص نیست اما حدود دوسوم
+هزینه پهنای باند \lt{CDN} را حذف می‌کند. این هزینه با موفقیت محصول \textbf{خطی} بالا می‌رود،
+بنابراین باید در روز اول تنظیم شود نه پس از رسیدن اولین قبض سنگین.
+\end{mobbox}
+
+\section{استک وب}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{2.9cm} N{3.9cm} N{8.8cm}@{}}
+\toprule
+\textbf{لایه} & \textbf{انتخاب} & \textbf{دلیل} \\
+\midrule
+\endhead
+فریم‌ورک & \lt{Next.js 15 (App Router)} & صفحات کاتالوگ \lt{SSG} با \lt{ISR}، صفحات کاربری \lt{CSR} پشت احراز هویت. یک اپ، دو رفتار رندر. \\
+زبان و استایل & \lt{TypeScript + Tailwind} & با پلاگین منطقی \lt{RTL}. از \cd{ms-} و \cd{me-} استفاده شود نه \cd{ml-} و \cd{mr-}. \\
+فونت & \lt{Vazirmatn} خودمیزبان & با \cd{next/font} و زیرمجموعه فارسی --- فونت کامل عربی چند صد کیلوبایت اضافه است. \\
+پخش‌کننده & \cd{hls.js} \lt{+ MediaSession} & \lt{Safari} بومی \lt{HLS} پخش می‌کند، بقیه با \cd{hls.js}. \lt{MediaSession API} کنترل روی نوار اعلان اندروید می‌دهد. \\
+وضعیت & \lt{TanStack Query + Zustand} & \lt{Query} برای داده سرور، \lt{Zustand} تنها برای وضعیت پخش‌کننده که بین صفحات زنده می‌ماند. \\
+کلاینت \lt{API} & \lt{orval} از \lt{OpenAPI} & تولید خودکار از همان \cd{openapi.yaml}. \\
+\lt{SEO} & \lt{schema.org} + نقشه سایت پویا & \lt{Audiobook}, \lt{Book}, \lt{Person}, \lt{Review}, \lt{PodcastEpisode} و \cd{hreflang}. نقشه سایت از دیتابیس ساخته شود. \\
+پنل‌ها & \lt{Refine} & ادمین، ناشر، سازمان و استودیو --- هر چهار روی یک اپ با نقش‌های متفاوت. \\
+\bottomrule
+\end{longtable}
+
+\section{استک موبایل}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{2.9cm} N{3.9cm} N{8.8cm}@{}}
+\toprule
+\textbf{لایه} & \textbf{انتخاب} & \textbf{دلیل} \\
+\midrule
+\endhead
+فریم‌ورک & \lt{Flutter} & یک کدبیس، چند خروجی --- معماری سرویسی در بخش \ref{sec:superapp}. \\
+صوت & \cd{just\_audio} \lt{+} \cd{audio\_service} & بالغ‌ترین مسیر برای پخش پس‌زمینه، کنترل قفل صفحه، \lt{Android Auto} و \lt{CarPlay}. \\
+آفلاین & \lt{m4a} تک‌فایل با \lt{Range} & \lt{HLS} برای استریم، فایل تک‌تکه برای دانلود. دانلود \lt{HLS} رمزنگاری‌شده در \lt{Flutter} راه‌حل بالغی ندارد. \\
+دیتابیس محلی & \lt{Drift} & \lt{SQLite} نوع‌امن برای کتابخانه آفلاین، صف همگام‌سازی موقعیت و فهرست دانلودها. \\
+وضعیت & \lt{Riverpod} & تست‌پذیر و بدون وابستگی به درخت ویجت. \\
+کلاینت \lt{API} & \lt{dio} + کد تولیدشده & از همان \cd{openapi.yaml} با \lt{openapi-generator}. \\
+نوتیفیکیشن & \lt{Pushe} یا \lt{Chabok} \lt{+ FCM} & \ttrap\ روی نسخه کافه‌بازار نباید تنها به \lt{FCM} تکیه کرد؛ سرویس‌های ایرانی برای این کانال ساخته شده‌اند. \\
+ضبط صدا & \cd{record} + موج صوتی & برای ضبط پادکست، نمونه صدا و چالش صوتی. \\
+توزیع & کافه‌بازار و مایکت & گوگل‌پلی برای توسعه‌دهنده ایرانی در دسترس نیست. \lt{iOS} آخر قرار گیرد. \\
+\bottomrule
+\end{longtable}
+
+\section{معماری سوپر‌اپ: یک اپ، چند سرویس}
+\label{sec:superapp}
+هدف این است که بزرگسال، کودک و خالق محتوا مانند اسنپ‌فود و اسنپ‌پی درون یک اپ جامع مدیریت شوند.
+این جهت‌گیری درست است، اما باید مشخص شود کدام بخش از الگوی اسنپ به کتاپاد منتقل می‌شود و کدام بخش نه ---
+چون کپی کامل آن الگو، چند سال کار مهندسی برای سه سرویس است.
+
+\subsection{چه چیزی از الگوی اسنپ منتقل می‌شود}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{4.6cm} N{1.9cm} N{9.2cm}@{}}
+\toprule
+\textbf{الگوی اسنپ} & \textbf{مناسب؟} & \textbf{دلیل} \\
+\midrule
+\endhead
+یک حساب و یک کیف پول مشترک & \textcolor{mob}{\textbf{بله}} & مهم‌ترین بخش الگو. والد نباید برای کودکش حساب دوم بسازد و اعتبار جدا شارژ کند. \\
+رجیستری سرویس سمت سرور & \textcolor{mob}{\textbf{بله}} & اسنپ کاشی‌های سرویس را از سرور می‌گیرد تا بتواند سرویس را بدون آپدیت اپ روشن یا خاموش کند. \\
+انتشار سرویس‌ها به‌عنوان اپ مستقل & \textcolor{mob}{\textbf{بله}} & اسنپ‌فود هم داخل اسنپ است هم اپ مستقل. «کتاپاد کودک» هم باید هر دو باشد. \\
+گرید سرویس‌ها در صفحه خانه & \textcolor{kid}{\textbf{محدود}} & اسنپ ده‌ها سرویس دارد، شما سه تا. گرید بزرگ برای سه کاشی، فضای هدررفته است. \\
+سرویس‌های کاملاً بی‌ربط & \textcolor{warn}{\textbf{خیر}} & سفر و غذا و پرداخت سه کسب‌وکارند. سرویس‌های شما \textbf{یک کسب‌وکارند با سه مخاطب}. \\
+ران‌تایم مینی‌اپ (جاوااسکریپت، سندباکس، بازبینی) & \textcolor{warn}{\textbf{خیر}} & زیرساخت مینی‌اپ برای اکوسیستم توسعه‌دهنده ثالث ساخته می‌شود. شما سه سرویس دارید که خودتان می‌نویسید. \\
+\bottomrule
+\end{longtable}
+
+\begin{notebox}{تفاوت بنیادی که معماری را تعیین می‌کند}
+سرویس‌های اسنپ \textbf{کارهای متفاوت} برای \textbf{یک نفر} هستند. سرویس‌های کتاپاد
+\textbf{یک کار واحد} برای \textbf{افراد و نقش‌های متفاوت} هستند. بنابراین معماری درست
+«پوسته به‌علاوه ماژول سرویس» است، نه «پلتفرم مینی‌اپ». این تفاوت بخش بزرگی از هزینه مهندسی
+الگوی اسنپ را حذف می‌کند و تقریباً تمام منفعتش را نگه می‌دارد.
+\end{notebox}
+
+\subsection{سه لایه}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.0cm} N{4.4cm} N{8.3cm}@{}}
+\toprule
+\textbf{لایه} & \textbf{مالکیت} & \textbf{محتوا} \\
+\midrule
+\endhead
+پوسته & اپ میزبان & اسپلش، ورود با \lt{OTP}، سوییچ پروفایل، کیف پول، پشتیبانی، نوتیفیکیشن، مسیریاب \lt{deep-link}، رجیستری سرویس، \lt{feature flag}، موتور تم. \\
+سرویس‌ها & ماژول‌های مستقل & \cd{service\_listen} (بزرگسال)، \cd{service\_kids} (کودک)، \cd{service\_studio} (خالق محتوا). بعداً \cd{service\_org} و \cd{service\_live}. \\
+قابلیت‌های مشترک & بسته‌های پایه & \cd{core\_audio}، \cd{core\_catalog}، \cd{core\_wallet}، \cd{core\_sync}، \cd{core\_design}، \cd{core\_network}. هر سرویس این‌ها را مصرف می‌کند، هیچ‌کدام را کپی نمی‌کند. \\
+\bottomrule
+\end{longtable}
+
+\subsection{ساختار مونوریپو}
+با \lt{Melos} مدیریت می‌شود. نکته کلیدی: پوشه \cd{apps/} چند خروجی دارد که هرکدام
+زیرمجموعه‌ای از ماژول‌ها را ثبت می‌کنند.
+
+\begin{english}
+\begin{Verbatim}[fontsize=\footnotesize,xleftmargin=4mm]
+ketapod/
+  apps/
+    ketapod/           super app - registers all services
+    ketapod_kids/      standalone - registers service_kids only
+  packages/
+    core_shell/        navigation host . service registry . DI . session
+    core_network/      generated OpenAPI client . interceptors . retry
+    core_auth/         otp . tokens . profiles . roles
+    core_audio/        THE single audio engine - see warning below
+    core_catalog/      books . editions . chapters . transcripts
+    core_wallet/       balance . purchase . entitlement checks
+    core_sync/         positions . offline queue . download manager
+    core_design/       tokens . themes . shared widgets
+    service_listen/    adult experience
+    service_kids/      kids experience
+    service_studio/    creator experience (webview + native bridge)
+\end{Verbatim}
+\end{english}
+
+\begin{kidbox}{این، الگوی \lt{flavor} بخش \ref{sec:surfaces} را دقیق‌تر می‌کند}
+پیش‌تر برای نسخه کودک \lt{flavor} پیشنهاد شد. با ساختار ماژولار بالا به چیزی بهتر می‌رسیم:
+اپ مستقل «کتاپاد کودک» صرفاً یک ورودی دیگر در \cd{apps/} است که فقط \cd{service\_kids} را ثبت می‌کند.
+نتیجه: هم کودک داخل اپ جامع هست (برای خانواده‌ای که از قبل کاربر است)، هم به‌صورت اپ مستقل
+در کافه‌بازار منتشر می‌شود (برای والدی که «قصه صوتی کودک» جستجو می‌کند) --- با یک کدبیس.
+\end{kidbox}
+
+\subsection{قرارداد ماژول سرویس}
+هر سرویس یک کلاس ثابت پیاده می‌کند و پوسته چیزی درباره درون آن نمی‌داند.
+
+\begin{english}
+\begin{Verbatim}[fontsize=\footnotesize,xleftmargin=4mm]
+abstract class ServiceModule {
+  String get id;                      // "listen" | "kids" | "studio"
+  String get titleKey;
+  IconData get icon;
+  ThemeData themeFor(Brightness b);   // per-service theme
+  List<RouteBase> routes();           // mounted under /{id}/...
+  bool isAvailable(SessionContext c); // roles, profile type, flags
+  Future<void> warmUp();              // lazy - called on first entry
+}
+\end{Verbatim}
+\end{english}
+
+پوسته ماژول‌ها را در \cd{ServiceRegistry} ثبت می‌کند و مسیریاب (\lt{go\_router}) مسیرهای هر
+ماژول را زیر پیشوند خودش سوار می‌کند: \cd{/listen/book/123}، \cd{/kids/story/45}،
+\cd{/studio/upload}. \lt{deep-link} و \lt{universal link} به همین مسیرها نگاشت می‌شوند.
+
+\textbf{متادیتا زودهنگام، کد دیرهنگام.} فقط شناسه و آیکون و شرط دسترسیِ ماژول‌ها در زمان
+راه‌اندازی خوانده می‌شود؛ بارگذاری واقعی کد هر سرویس هنگام اولین ورود انجام می‌گیرد،
+وگرنه زمان \lt{cold start} با هر سرویس جدید بدتر می‌شود.
+
+\subsection{رجیستری سرویس سمت سرور}
+این همان چیزی است که الگوی اسنپ را واقعاً ارزشمند می‌کند و اگر حذف شود، سوپر‌اپ فقط
+یک اپ بزرگ‌تر است. پوسته در هر بار اجرا می‌پرسد «این کاربر چه سرویس‌هایی می‌بیند».
+
+\begin{english}
+\begin{Verbatim}[fontsize=\footnotesize,xleftmargin=4mm]
+GET /api/v1/me/services
+
+{
+  "services": [
+    { "id": "listen", "order": 1, "enabled": true,
+      "badge": null,   "minAppVersion": "1.0.0" },
+    { "id": "kids",   "order": 2, "enabled": true,
+      "badge": "new",  "minAppVersion": "1.2.0" },
+    { "id": "studio", "order": 3, "enabled": false,
+      "reason": "creator_role_required",
+      "cta": { "label": "apply", "route": "/studio/apply" } }
+  ]
+}
+\end{Verbatim}
+\end{english}
+
+با این \lt{endpoint} می‌توانید سرویس تازه را برای ۵ درصد کاربران روشن کنید، سرویس معیوب را
+بدون انتشار نسخه جدید خاموش کنید، و ترتیب کاشی‌ها را بر اساس رفتار کاربر تغییر دهید.
+\cd{minAppVersion} اجازه می‌دهد سرویسی که به قابلیت جدید کلاینت نیاز دارد روی نسخه‌های قدیمی
+پنهان بماند --- که در ایران اهمیت مضاعف دارد، چون کاربر کافه‌بازار دیر آپدیت می‌کند.
+
+\subsection{ورود به سرویس: پروفایل، نه گرید}
+اسنپ گرید سرویس می‌گذارد چون سرویس‌هایش \textbf{کار} هستند. سرویس‌های شما بیشتر
+\textbf{آدم} هستند، پس الگوی درست ورودی، سوییچ پروفایل است:
+\begin{itemize}
+\item در اجرای اول پس از ورود: «چه کسی گوش می‌دهد؟» --- پروفایل بزرگسال یا پروفایل کودک.
+\item پروفایل کودک $\rightarrow$ مستقیم وارد \cd{service\_kids} با تم و ناوبری خودش.
+\item پروفایل بزرگسال $\rightarrow$ وارد \cd{service\_listen}.
+\item \textbf{استودیو} چون یک نقش است نه یک شخص، به‌صورت کاشی در حساب کاربری ظاهر می‌شود و
+فقط برای کاربری که نقش \cd{creator} دارد فعال است.
+\end{itemize}
+
+\begin{warnbox}{قاعده‌ای که اگر شکسته شود، صوت اپ خراب می‌شود}
+\textbf{موتور صوت باید در پوسته زندگی کند، نه داخل سرویس‌ها.} روی هر دستگاه فقط
+\textbf{یک} \lt{audio session} و یک نوتیفیکیشن پخش می‌تواند وجود داشته باشد. اگر
+\cd{service\_listen} و \cd{service\_kids} هرکدام نمونه \cd{just\_audio} خودشان را بسازند،
+نتیجه دو کنترل روی قفل صفحه، جنگ بر سر \lt{audio focus} و پخش هم‌زمان دو فایل است.
+\cd{core\_audio} یک \lt{singleton} در پوسته باشد و سرویس‌ها فقط \textbf{صف پخش} را به آن بدهند.
+\end{warnbox}
+
+\begin{warnbox}{ایمنی کودک در پوسته اعمال می‌شود، نه در سرویس}
+اگر حالت کودک صرفاً یک مسیر در مسیریاب باشد، یک \lt{deep-link} به \cd{/listen/...} آن را دور می‌زند.
+پوسته باید \cd{SessionMode} نگه دارد؛ مسیریاب هر مسیر خارج از سرویس فعال را رد کند؛ و
+\cd{core\_network} در همه درخواست‌ها هدر \cd{X-Profile-Id} بفرستد تا \textbf{بک‌اند نیز}
+سیاست کودک را مستقل از کلاینت اعمال کند. اعمال یک‌طرفه در کلاینت کافی نیست.
+\end{warnbox}
+
+\subsection{استودیو به‌صورت \lt{WebView}}
+استودیوی سازنده وب‌محور تعریف شده است. در اپ، آن را دوباره ننویسید:
+\cd{service\_studio} یک \lt{WebView} سخت‌شده روی همان استودیوی وب باشد، به‌علاوه یک پل بومی
+برای دو کار که وب نمی‌تواند: \textbf{ضبط با میکروفن} و \textbf{آپلود فایل حجیم در پس‌زمینه}.
+این دقیقاً همان کاری است که سوپر‌اپ‌ها برای سرویس‌های کم‌تکرار انجام می‌دهند و ماه‌ها کار
+صرفه‌جویی می‌کند. توکن با \lt{one-time code} از پوسته به \lt{WebView} پاس داده شود،
+نه با اشتراک‌گذاری \lt{cookie}.
+
+\subsection{تله‌های این الگو}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{4.0cm} N{11.6cm}@{}}
+\toprule
+\textbf{تله} & \textbf{راه اجتناب} \\
+\midrule
+\endhead
+حجم اپ & سه سرویس به‌علاوه \lt{WebView} و موتور صوت، اپ را بزرگ می‌کند و کاربر کافه‌بازار به حجم حساس است. با \cd{--split-per-abi} خروجی جدا بسازید و دارایی‌های سنگین را از شبکه بگیرید نه از بسته نصبی. \\
+زمان راه‌اندازی & ماژول‌ها را \lt{lazy} بارگذاری کنید؛ در راه‌اندازی فقط متادیتای سرویس‌ها خوانده شود. \\
+نشت وابستگی بین سرویس‌ها & هیچ سرویسی نباید سرویس دیگر را \cd{import} کند. اگر چیزی مشترک شد، به \cd{core\_*} منتقل می‌شود. این قاعده را در \lt{CI} با بررسی گراف وابستگی اجباری کنید. \\
+واگرایی تم & تم هر سرویس باید از توکن‌های مشترک \cd{core\_design} مشتق شود، نه از رنگ‌های دستی. \\
+ساختن ران‌تایم مینی‌اپ & وسوسه «پلتفرم» شدن را کنار بگذارید. وقتی سرویس چهارم و پنجم آمد، همین الگو کافی است. \\
+\bottomrule
+\end{longtable}
+
+\section{زیرساخت و سرویس‌های ایرانی}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{2.9cm} N{4.2cm} N{8.5cm}@{}}
+\toprule
+\textbf{لایه} & \textbf{انتخاب} & \textbf{دلیل} \\
+\midrule
+\endhead
+میزبانی & \lt{VPS} ایرانی \lt{+ Docker Compose} & آروان‌کلاود، لیارا یا پارس‌پک. \lt{Kubernetes} تنها هنگام رسیدن به بیش از سه مهندس اضافه شود. \\
+ذخیره فایل و \lt{CDN} & \lt{Object Storage} ایرانی & سازگار با \lt{S3}، پس \cd{aws-sdk-go-v2} کار می‌کند. باید \lt{HTTP Range} و \lt{URL} امضاشده پشتیبانی کند. \\
+پرداخت & زرین‌پال یا درگاه بانکی & زنجیره ثبت شرکت، حساب بانکی، اینماد و درگاه هفته‌ها طول می‌کشد و کاملاً غیرفنی است. \textbf{باید همین حالا آغاز شود.} \\
+پیامک & کاوه‌نگار یا \lt{SMS.ir} & برای \lt{OTP}. خط خدماتی گرفته شود نه تبلیغاتی، وگرنه \lt{OTP} فیلتر می‌شود. \\
+درگاه هوش مصنوعی & لایه انتزاعی چندتأمین‌کننده & هر تأمین‌کننده ممکن است قطع شود. واسط \cd{AIProvider} نوشته شود تا پشت آن قابل تعویض باشد. \\
+\lt{CI/CD} & \lt{GitHub Actions} & بیلد چندمرحله‌ای، تست با \lt{testcontainers}، انتشار ایمیج، استقرار با \lt{SSH}. \\
+پشتیبان‌گیری & \lt{pgBackRest} یا \lt{wal-g} & روز اول راه‌اندازی شود و \textbf{بازیابی تست شود}؛ پشتیبانی تست‌نشده وجود ندارد. \\
+\bottomrule
+\end{longtable}
+
+\section{چهار اهرم بهره‌وری}
+\label{sec:leverage}
+بدون این چهار مورد، نگهداری هم‌زمان چهار کدبیس برای یک تیم کوچک شدنی نیست.
+
+\subsection{قرارداد \lt{API} به‌عنوان تنها منبع حقیقت}
+یک فایل \cd{openapi.yaml} نوشته می‌شود و از آن سه خروجی تولید می‌گردد: واسط‌های سرور در \lt{Go}
+با \lt{oapi-codegen}، کلاینت \lt{TypeScript} با \lt{orval}، و کلاینت \lt{Dart} با \lt{openapi-generator}.
+وقتی یک فیلد تغییر می‌کند، هر سه کلاینت \textbf{در زمان کامپایل} خطا می‌دهند نه در زمان اجرا.
+
+\subsection{توکن‌های طراحی از یک منبع}
+یک فایل \lt{JSON} شامل رنگ، فاصله، شعاع و تایپوگرافی؛ از آن \cd{tailwind.config} و
+\cd{ThemeData} فلاتر تولید می‌شود. بدون این، وب و اپ ظرف سه ماه واگرا می‌شوند.
+
+\subsection{پنل‌ها ساخته نشوند، پیکربندی شوند}
+ادمین، ناشر، سازمان و استودیو چهار پنل با نیازهای \lt{CRUD} مشابه‌اند. با \lt{Refine} روی همان
+\lt{API}، این چهار پنل چند هفته کار است نه چند ماه.
+
+\subsection{سرویس‌ها ماژول باشند نه کدبیس}
+معماری بخش \ref{sec:superapp} اجازه می‌دهد از یک مجموعه بسته، هم اپ جامع و هم اپ مستقل کودک
+ساخته شود --- دو خروجی، یک بار نگهداری.
+
+\begin{warnbox}{قاعده‌ای که از سه‌برابر شدن کار جلوگیری می‌کند}
+هیچ منطق کسب‌وکاری در فرانت نوشته نشود. محاسبه سطح گیمیفیکیشن، شرط تخفیف، سیاست کودک و
+محاسبه \cd{Entitlement} همه در \lt{Go} انجام شوند و فرانت تنها نمایش دهد. اگر این قاعده شکسته شود،
+هر قاعده \textbf{سه بار} نوشته می‌شود --- وب، موبایل، کودک --- و سپس سه نسخه از هم واگرا می‌شوند.
+\end{warnbox}
+
+\section{ترتیب ساخت}
+\label{sec:order}
+هیچ قابلیتی حذف نشده است؛ تنها ترتیب اجرا مشخص می‌شود تا هر مرحله روی مرحله قبل سوار شود.
+
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{2.4cm} F{3.4cm} N{9.8cm}@{}}
+\toprule
+\textbf{مرحله} & \textbf{عنوان} & \textbf{دامنه} \\
+\midrule
+\endhead
+پایه & قرارداد و اسکلت & \cd{openapi.yaml}، توکن‌های طراحی، مدل داده، مهاجرت‌ها، احراز هویت \lt{OTP}، پوسته و رجیستری سرویس، اسکلت \lt{CI/CD}. \textbf{هیچ قابلیت کاربری در این مرحله ساخته نمی‌شود.} \\
+۱ & کاتالوگ و پخش & کاتالوگ، صفحه کتاب با \lt{SEO}، \cd{core\_audio}، \cd{service\_listen}، ترنسکریپت همگام، همگام‌سازی موقعیت، کتابخانه، آفلاین، لندینگ. \\
+۲ & تجارت & کیف پول، دفتر کل، \cd{Entitlement}، درگاه پرداخت، اشتراک، کد تخفیف، هدیه. از این نقطه محصول قابل فروش است. \\
+۳ & کودک & \cd{service\_kids}، پروفایل کودک، سیاست‌ها در بک‌اند، پنل والد، گزارش هفتگی، اپ مستقل کودک، صفحه فرود کودک. \\
+۴ & کتاب‌یار و کشف & \lt{RAG} روی ترنسکریپت‌های مرحله ۱، خلاصه، کوییز، پیشنهاد هوشمند، جستجوی معنایی و صوتی، صفحه \cd{/ai}، برنامه مطالعاتی. \\
+۵ & نگهداشت & گیمیفیکیشن، \lt{streak}، نشان‌ها، رتبه‌بندی، داشبورد یادگیری، نوتیفیکیشن، دعوت دوستان، \lt{Smart Recap}. \\
+۶ & مشارکت کاربر & \cd{service\_studio}، آپلود \lt{PDF}، آپلود صوت، ضبط پادکست، نمونه صدا، بازارگاه صدا، صف تأیید. \\
+۷ & جامعه & نظرات، بحث، پرسش و پاسخ، جامعه گویش‌ها، مسابقات، چالش صوتی، جلسات پخش زنده. \\
+۸ & سازمانی & پورتال ناشر، پنل مدرسه و دانشگاه، صندلی سازمانی، آنالیتیکس سازمانی، کالای فیزیکی، کیوسک. \\
+\bottomrule
+\end{longtable}
+
+\begin{mobbox}{منطق این ترتیب}
+ترنسکریپت در مرحله ۱ ساخته می‌شود چون مرحله ۴ کاملاً روی آن سوار است.
+سیاست کودک در مرحله ۳ می‌نشیند چون پس از افزوده‌شدن جامعه و محتوای کاربر، ایمن‌سازی
+به‌مراتب سخت‌تر می‌شود. \cd{Entitlement} پیش از بخش سازمانی می‌آید چون دسترسی سازمانی
+چیزی جز \cd{Entitlement} با منشأ متفاوت نیست. پوسته و رجیستری سرویس در مرحله پایه ساخته
+می‌شوند، وگرنه \cd{service\_kids} در مرحله ۳ باید داخل یک اپ یکپارچه جا زده شود.
+\end{mobbox}
+
+\section{تصمیم‌هایی که پیش از اولین \lt{commit} باید گرفته شوند}
+\rowcolors{2}{zebra}{white}
+\begin{longtable}{@{}F{3.4cm} N{4.8cm} N{7.4cm}@{}}
+\toprule
+\textbf{تصمیم} & \textbf{پیشنهاد} & \textbf{هزینه تأخیر} \\
+\midrule
+\endhead
+روتر \lt{Go} & \lt{chi} نه \lt{Fiber} & مهاجرت از \lt{fasthttp} یعنی بازنویسی تمام میان‌افزارها و لایه سرو رسانه. \\
+پوسته و ماژول سرویس & از روز اول & تبدیل یک اپ یکپارچه به سوپر‌اپ در ماه دوازدهم، بازنویسی کل ناوبری و لایه صوت است. \\
+جای موتور صوت & \cd{core\_audio} در پوسته & دو \lt{audio session} روی یک دستگاه --- باگی که کاربر آن را «اپ خراب است» می‌بیند. \\
+ترنسکریپت همگام & از روز اول تولید و ذخیره شود & پردازش دوباره کل کاتالوگ؛ و تا آن روز نه \lt{SEO} وجود دارد، نه دسترس‌پذیری، نه \lt{context} کتاب‌یار. \\
+پروفایل کودک & زیرمجموعه والد، نه کاربر مستقل & نوشتن استثنا در تمام مسیرهای مالکیت، پرداخت و حریم خصوصی. \\
+مدل نسخه‌های صوتی & هر کتاب چند \cd{AudioEdition} & گویش، صدای کودک، بازارگاه صدا و نسخه انسانی هیچ‌کدام بدون این ممکن نیست. \\
+بیت‌ریت و فرمت & ۴۸ کیلوبیت مونو؛ \lt{HLS} برای استریم و \lt{m4a} برای دانلود & ترنسکد دوباره کل کاتالوگ، و تا آن روز قبض \lt{CDN} چند برابر. \\
+قرارداد \lt{OpenAPI} & پیش از اولین \lt{endpoint} & سه کلاینت دست‌نویس که هر تغییر \lt{API} در زمان اجرا آن‌ها را می‌شکند. \\
+جای منطق کسب‌وکار & فقط در \lt{Go} & هر قاعده سه بار نوشته می‌شود و سه نسخه واگرا می‌شوند. \\
+پرونده شرکت و درگاه & امروز آغاز شود & محصول آماده، بدون هیچ راهی برای دریافت پول. \\
+\bottomrule
+\end{longtable}
+
+\vspace{1.0cm}
+\begin{center}
+\rule{6cm}{0.4pt}\\[10pt]
+{\small\color{soft}
+تخصیص قابلیت‌ها از پیچ‌دک «پروژه کتاب صوتی نسخه ۱۶» (اسلایدهای ۹ تا ۲۳)،
+سند \lt{design-web-v1.1-HomePage}،\\
+یادداشت‌های دست‌نویس جلسات و گفتگوی فنی «تحلیل فنی استارتاپ» استخراج شده است.\\
+هیچ قابلیتی حذف نشده --- همه در ماتریس تخصیص یافته و در بخش «ترتیب ساخت» زمان‌بندی شده‌اند.}
+\end{center}
+
+\end{document}
